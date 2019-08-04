@@ -1,0 +1,18 @@
+INDEX VERSION 1.131+/home/todd/WebDev/java/eclipse-ws/LearnJavaTheEasyWay/.metadata/.plugins/org.eclipse.jdt.core
+1697500166.index
+2050445201.index
+2481882548.index
+3099527027.index
+2755987434.index
+1431798534.index
+739630865.index
+673470985.index
+3377153947.index
+3741185001.index
+457129921.index
+148135673.index
+2570249696.index
+375377334.index
+1531733335.index
+500478837.index
+3540139643.index
