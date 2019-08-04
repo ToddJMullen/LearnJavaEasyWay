@@ -1,2 +1,0 @@
-INDEX VERSION 1.131+/home/lyzx/Dev/java/LearnJavaEasyWay/.metadata/.plugins/org.eclipse.jdt.core
-500478837.index
