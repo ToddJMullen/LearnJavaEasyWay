@@ -43,18 +43,17 @@ public class HiLo {
 				guesses++;
 				
 				if( guess == theNumber ) {
-					phrase = "//////////////////////////////////"
-							+ "\nCorrect, the number is " + theNumber + "!"
-							+ "\nYou guessed right in " + guesses + " guesses!";
+					phrase = "right in " + guesses + " guesses!"
+							+ "\nThe number is " + theNumber + "!";
 				} 
 				else if( guess > theNumber ) {
-					phrase = guess + " is too high\nTry again.";
+					phrase = "too high\nTry again.";
 				}
 				else {
-					phrase = guess + " is too low\nTry again.";
+					phrase = "too low\nTry again.";
 				}
 				
-				System.out.println( phrase );
+				System.out.println("You guessed " + phrase );
 			}//while
 			
 			System.out.println("Do you want to play again y/n?");

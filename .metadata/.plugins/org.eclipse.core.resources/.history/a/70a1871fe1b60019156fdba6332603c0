@@ -44,7 +44,7 @@ public class HiLo {
 				
 				if( guess == theNumber ) {
 					phrase = "//////////////////////////////////"
-							+ "\nCorrect, the number is " + theNumber + "!"
+							+ "The number is " + theNumber + "!"
 							+ "\nYou guessed right in " + guesses + " guesses!";
 				} 
 				else if( guess > theNumber ) {
