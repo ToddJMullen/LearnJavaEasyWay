@@ -4,6 +4,8 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class GuessingGame extends JFrame {
 	
@@ -36,6 +38,11 @@ public class GuessingGame extends JFrame {
 		tiGuess.setColumns(10);
 		
 		JButton btnGuess = new JButton("Guess!");
+		btnGuess.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				checkGuess();
+			}
+		});
 		btnGuess.setBounds(178, 147, 114, 25);
 		getContentPane().add(btnGuess);
 		
