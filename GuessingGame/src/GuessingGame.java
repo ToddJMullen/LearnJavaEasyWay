@@ -46,6 +46,11 @@ public class GuessingGame extends JFrame {
 		getContentPane().add(lblPrompt);
 		
 		tiGuess = new JTextField();
+		tiGuess.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {//apparently only fires for ENTER?
+				checkGuess();
+			}
+		});
 		tiGuess.setBounds(308, 91, 40, 19);
 		getContentPane().add(tiGuess);
 		tiGuess.setColumns(10);
@@ -78,7 +83,7 @@ public class GuessingGame extends JFrame {
 
 		if( guess == theNumber ) {
 			msg = "Correct, the number is " + theNumber + "!"
-					+ " Keep going. Guess the new #!"
+					+ " Keep going. Guess the new number!"
 					;
 //					+ "\nYou guessed right in " + guesses + " guesses!";
 			newGame();
@@ -90,6 +95,8 @@ public class GuessingGame extends JFrame {
 			msg = guess + " is too low. Try again.";
 		}
 		lblOutput.setText(msg);
+		tiGuess.requestFocus();
+		tiGuess.selectAll();
 		
 	}//checkGuess/
 	
