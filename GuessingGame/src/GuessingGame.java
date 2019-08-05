@@ -1,6 +1,8 @@
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+
+import java.awt.Dimension;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -15,6 +17,16 @@ public class GuessingGame extends JFrame {
 	private JLabel lblOutput;
 	
 	private int theNumber;
+	
+
+
+	public static void main(String[] args) {
+		GuessingGame game = new GuessingGame();
+		game.newGame();
+		game.setSize(new Dimension(450,300) );
+		game.setVisible(true);
+	}//main
+
 	
 	public GuessingGame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -69,17 +81,13 @@ public class GuessingGame extends JFrame {
 //					+ "\nYou guessed right in " + guesses + " guesses!";
 		} 
 		else if( guess > theNumber ) {
-			msg = guess + " is too high\nTry again.";
+			msg = guess + " is too high. Try again.";
 		}
 		else {
-			msg = guess + " is too low\nTry again.";
+			msg = guess + " is too low. Try again.";
 		}
 		lblOutput.setText(msg);
 		
 	}//checkGuess/
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
+	
 }
