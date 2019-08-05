@@ -40,7 +40,7 @@ public class GuessingGame extends JFrame {
 		lblToddGuessingGame.setBounds(12, 39, 420, 15);
 		getContentPane().add(lblToddGuessingGame);
 		
-		lblPrompt = new JLabel("Guess a number between 1 & 100");
+		lblPrompt = new JLabel("Guess a number between 1 & 10");
 		lblPrompt.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblPrompt.setBounds(12, 93, 251, 15);
 		getContentPane().add(lblPrompt);
@@ -77,8 +77,11 @@ public class GuessingGame extends JFrame {
 		
 
 		if( guess == theNumber ) {
-			msg = "Correct, the number is " + theNumber + "!";
+			msg = "Correct, the number is " + theNumber + "!"
+					+ " Keep going. Guess the new #!"
+					;
 //					+ "\nYou guessed right in " + guesses + " guesses!";
+			newGame();
 		} 
 		else if( guess > theNumber ) {
 			msg = guess + " is too high. Try again.";
