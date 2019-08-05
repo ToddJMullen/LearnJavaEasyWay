@@ -45,6 +45,10 @@ public class GuessingGame extends JFrame {
 		getContentPane().add(lblOutput);
 	}
 	
+	public void newGame() {
+		theNumber = (int)(Math.random() * 100 + 1);
+	}//newGame/
+	
 	
 	public void checkGuess() {
 		String guessText = tiGuess.getText();
