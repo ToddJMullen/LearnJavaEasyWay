@@ -60,7 +60,7 @@ public class GuessingGame extends JFrame {
 		
 		lblOutput = new JLabel("Enter a number above & click Guess!");
 		lblOutput.setHorizontalAlignment(SwingConstants.CENTER);
-		lblOutput.setBounds(12, 211, 420, 15);
+		lblOutput.setBounds(12, 211, 420, 46);
 		getContentPane().add(lblOutput);
 	}
 	
@@ -76,8 +76,7 @@ public class GuessingGame extends JFrame {
 		
 
 		if( guess == theNumber ) {
-			msg = "//////////////////////////////////"
-					+ "\nCorrect, the number is " + theNumber + "!";
+			msg = "Correct, the number is " + theNumber + "!";
 //					+ "\nYou guessed right in " + guesses + " guesses!";
 		} 
 		else if( guess > theNumber ) {
