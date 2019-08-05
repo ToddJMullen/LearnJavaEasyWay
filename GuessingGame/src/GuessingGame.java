@@ -6,7 +6,14 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 
 public class GuessingGame extends JFrame {
+	
 	private JTextField tiGuess;
+
+	private JLabel lblPrompt;
+	private JLabel lblOutput;
+	
+	private int theNumber;
+	
 	public GuessingGame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Todd's Guessing Game");
@@ -18,10 +25,10 @@ public class GuessingGame extends JFrame {
 		lblToddGuessingGame.setBounds(12, 39, 420, 15);
 		getContentPane().add(lblToddGuessingGame);
 		
-		JLabel lblGuessANumber = new JLabel("Guess a number between 1 & 100");
-		lblGuessANumber.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblGuessANumber.setBounds(12, 93, 251, 15);
-		getContentPane().add(lblGuessANumber);
+		lblPrompt = new JLabel("Guess a number between 1 & 100");
+		lblPrompt.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblPrompt.setBounds(12, 93, 251, 15);
+		getContentPane().add(lblPrompt);
 		
 		tiGuess = new JTextField();
 		tiGuess.setBounds(308, 91, 40, 19);
@@ -32,7 +39,7 @@ public class GuessingGame extends JFrame {
 		btnGuess.setBounds(178, 147, 114, 25);
 		getContentPane().add(btnGuess);
 		
-		JLabel lblOutput = new JLabel("Enter a number above & click Guess!");
+		lblOutput = new JLabel("Enter a number above & click Guess!");
 		lblOutput.setHorizontalAlignment(SwingConstants.CENTER);
 		lblOutput.setBounds(12, 211, 420, 15);
 		getContentPane().add(lblOutput);
