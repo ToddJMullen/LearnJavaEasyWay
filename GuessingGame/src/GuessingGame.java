@@ -24,7 +24,7 @@ public class GuessingGame extends JFrame {
 	public static void main(String[] args) {
 		GuessingGame game = new GuessingGame();
 		game.newGame();
-		game.setSize(new Dimension(450,300) );
+		game.setSize(new Dimension(500,300) );
 		game.setVisible(true);
 	}//main
 
@@ -78,25 +78,33 @@ public class GuessingGame extends JFrame {
 	public void checkGuess() {
 		String guessText = tiGuess.getText();
 		String msg = "";
-		int guess = Integer.parseInt(guessText);
+		try {
+			
+			int guess = Integer.parseInt(guessText);
+			
+	
+			if( guess == theNumber ) {
+				msg = "Correct, the number is " + theNumber + "!"
+						+ " Keep going. Guess the new number!"
+						;
+	//					+ "\nYou guessed right in " + guesses + " guesses!";
+				newGame();
+			} 
+			else if( guess > theNumber ) {
+				msg = guess + " is too high. Try again.";
+			}
+			else {
+				msg = guess + " is too low. Try again.";
+			}
+		} catch( Exception e ) {
+			msg = "Enter a whole number between 1 and " + (int)Math.pow(10, level);
+		} finally {
+			
+			lblOutput.setText(msg);
+			tiGuess.requestFocus();
+			tiGuess.selectAll();
+		}
 		
-
-		if( guess == theNumber ) {
-			msg = "Correct, the number is " + theNumber + "!"
-					+ " Keep going. Guess the new number!"
-					;
-//					+ "\nYou guessed right in " + guesses + " guesses!";
-			newGame();
-		} 
-		else if( guess > theNumber ) {
-			msg = guess + " is too high. Try again.";
-		}
-		else {
-			msg = guess + " is too low. Try again.";
-		}
-		lblOutput.setText(msg);
-		tiGuess.requestFocus();
-		tiGuess.selectAll();
 		
 	}//checkGuess/
 	
