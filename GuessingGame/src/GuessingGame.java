@@ -17,6 +17,7 @@ public class GuessingGame extends JFrame {
 	private JLabel lblOutput;
 	
 	private int theNumber;
+	private int level = 1;
 	
 
 
@@ -65,7 +66,7 @@ public class GuessingGame extends JFrame {
 	}
 	
 	public void newGame() {
-		theNumber = (int)(Math.random() * 100 + 1);
+		theNumber = (int)(Math.random() * Math.pow(10, level) + 1);
 	}//newGame/
 	
 	
