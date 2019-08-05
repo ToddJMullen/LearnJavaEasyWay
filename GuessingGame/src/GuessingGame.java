@@ -44,6 +44,28 @@ public class GuessingGame extends JFrame {
 		lblOutput.setBounds(12, 211, 420, 15);
 		getContentPane().add(lblOutput);
 	}
+	
+	
+	public void checkGuess() {
+		String guessText = tiGuess.getText();
+		String msg = "";
+		int guess = Integer.parseInt(guessText);
+		
+
+		if( guess == theNumber ) {
+			msg = "//////////////////////////////////"
+					+ "\nCorrect, the number is " + theNumber + "!";
+//					+ "\nYou guessed right in " + guesses + " guesses!";
+		} 
+		else if( guess > theNumber ) {
+			msg = guess + " is too high\nTry again.";
+		}
+		else {
+			msg = guess + " is too low\nTry again.";
+		}
+		lblOutput.setText(msg);
+		
+	}//checkGuess/
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
