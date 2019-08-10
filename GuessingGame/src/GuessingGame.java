@@ -5,6 +5,9 @@ import javax.swing.SwingConstants;
 import java.awt.Dimension;
 import java.awt.Font;
 import javax.swing.JTextField;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -21,7 +24,17 @@ public class GuessingGame extends JFrame {
 	
 	private JButton btnGuess;
 	private JButton btnPlayAgain;
+
+	private ButtonGroup group;
+	private JRadioButton rdbtnEasy;
+	private JRadioButton rdbtnMedium;
+	private JRadioButton rdbtnHard;
+	private JRadioButton rdbtnCrazy;
 	
+	private Box boxLevels;
+	private Box boxPrompt;
+	
+	private int max = 1;
 	private int theNumber;
 	private int level = 1;
 	private int attempts = 0;
@@ -45,11 +58,19 @@ public class GuessingGame extends JFrame {
 		lblToddGuessingGame.setHorizontalAlignment(SwingConstants.CENTER);
 		lblToddGuessingGame.setBounds(12, 39, 420, 15);
 		getContentPane().add(lblToddGuessingGame);
+
+		boxPrompt = new Box( BoxLayout.X_AXIS );
+		boxPrompt.setVisible(true);
+		boxPrompt.setBounds(35, 70, 380, 20);
+		getContentPane().add(boxPrompt);
 		
-		lblPrompt = new JLabel("Guess a number between 1 & 10");
+		lblPrompt = new JLabel();
 		lblPrompt.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblPrompt.setBounds(12, 93, 251, 15);
-		getContentPane().add(lblPrompt);
+//		lblPrompt.setBounds(12, 93, 251, 15);
+		boxPrompt.add(lblPrompt);
+//		getContentPane().add(lblPrompt);
+		
+		boxPrompt.add( Box.createRigidArea(new Dimension(75,0)) );
 		
 		tiGuess = new JTextField();
 		tiGuess.addActionListener(new ActionListener() {
@@ -57,9 +78,11 @@ public class GuessingGame extends JFrame {
 				checkGuess();
 			}
 		});
-		tiGuess.setBounds(308, 91, 40, 19);
-		getContentPane().add(tiGuess);
-		tiGuess.setColumns(10);
+//		tiGuess.setBounds(10, 10, 15, 19);//no effect in box
+//		tiGuess.setColumns(3);//no effect in box
+//		tiGuess.setPreferredSize(new Dimension(45, 0));//no effect in box
+		boxPrompt.add(tiGuess);
+//		getContentPane().add(tiGuess);
 		
 		btnGuess = new JButton("Guess!");
 		btnGuess.addActionListener(new ActionListener() {
@@ -82,25 +105,42 @@ public class GuessingGame extends JFrame {
 		getContentPane().add(lblNumTries);
 		
 		//radio buttons added to give the difficulty selection, abandoned for now
-		JRadioButton rdbtnEasy = new JRadioButton("Easy");
+		boxLevels = new Box( BoxLayout.X_AXIS );
+		boxLevels.setBounds(87, 70, 280, 40);
+		boxLevels.setVisible(false);
+		getContentPane().add(boxLevels);
+		group = new ButtonGroup();
+//		boxLevels.add(group);// << inconsistent, the group is only a controller for which btn is selected
+		
+		
+		rdbtnEasy = new JRadioButton("Easy", true );
+//		rdbtnEasy.setSelected(true);
 		rdbtnEasy.setBounds(20, 62, 85, 23);
-		rdbtnEasy.setVisible(false);
-		getContentPane().add(rdbtnEasy);
+		rdbtnEasy.setVisible(true);
+		group.add(rdbtnEasy);
+		boxLevels.add(rdbtnEasy);
+//		getContentPane().add(rdbtnEasy);
 		
-		JRadioButton rdbtnMedium = new JRadioButton("Medium");
+		rdbtnMedium = new JRadioButton("Medium");
 		rdbtnMedium.setBounds(125, 62, 85, 23);
-		rdbtnMedium.setVisible(false);
-		getContentPane().add(rdbtnMedium);
+		rdbtnMedium.setVisible(true);
+		group.add(rdbtnMedium);
+		boxLevels.add(rdbtnMedium);
+//		getContentPane().add(rdbtnMedium);
 		
-		JRadioButton rdbtnHard = new JRadioButton("Hard");
+		rdbtnHard = new JRadioButton("Hard");
 		rdbtnHard.setBounds(230, 62, 85, 23);
-		rdbtnHard.setVisible(false);
-		getContentPane().add(rdbtnHard);
+		rdbtnHard.setVisible(true);
+		group.add(rdbtnHard);
+		boxLevels.add(rdbtnHard);
+//		getContentPane().add(rdbtnHard);
 		
-		JRadioButton rdbtnCrazy = new JRadioButton("Crazy");
+		rdbtnCrazy = new JRadioButton("Crazy");
 		rdbtnCrazy.setBounds(335, 60, 85, 23);
-		rdbtnCrazy.setVisible(false);
-		getContentPane().add(rdbtnCrazy);
+		rdbtnCrazy.setVisible(true);
+		group.add(rdbtnCrazy);
+		boxLevels.add(rdbtnCrazy);
+//		getContentPane().add(rdbtnCrazy);
 		
 		btnPlayAgain = new JButton("Play Again!");
 		btnPlayAgain.addActionListener(new ActionListener() {
@@ -115,13 +155,29 @@ public class GuessingGame extends JFrame {
 	}
 	
 	public void newGame() {
+		boxLevels.setVisible(false);
 		btnPlayAgain.setVisible(false);
 		btnGuess.setVisible(true);
 		lblNumTries.setVisible(false);
 		lblOutput.setText("Game On!");
 		tiGuess.setText("");
+		if( rdbtnEasy.isSelected() ) {
+			level = 1;
+		}
+		if( rdbtnMedium.isSelected() ) {
+			level = 2;
+		}
+		if( rdbtnHard.isSelected() ) {
+			level = 3;
+		}
+		if( rdbtnCrazy.isSelected() ) {
+			level = 5;
+		}
 		attempts = 0;
-		theNumber = (int)(Math.random() * Math.pow(10, level) + 1);
+		max = (int)Math.pow(10, level);
+		theNumber = (int)(Math.random() * max  + 1);
+		lblPrompt.setText("Guess a number between 1 & " + max);
+		boxPrompt.setVisible(true);
 	}//newGame/
 	
 	
@@ -138,8 +194,11 @@ public class GuessingGame extends JFrame {
 						;
 				String tries = attempts == 1 ? " try!" : " tries!";
 				lblNumTries.setText("You guessed right in " + attempts + tries);
-				lblNumTries.setVisible(true);
 				btnGuess.setVisible(false);
+				
+				lblNumTries.setVisible(true);
+				boxPrompt.setVisible(false);
+				boxLevels.setVisible(true);
 				btnPlayAgain.setVisible(true);
 //				newGame();
 			} 
@@ -150,7 +209,7 @@ public class GuessingGame extends JFrame {
 				msg = guess + " is too low. Try again.";
 			}
 		} catch( Exception e ) {
-			msg = "Enter a whole number between 1 and " + (int)Math.pow(10, level);
+			msg = "Enter a whole number between 1 and " + max;
 		} finally {
 			
 			lblOutput.setText(msg);
