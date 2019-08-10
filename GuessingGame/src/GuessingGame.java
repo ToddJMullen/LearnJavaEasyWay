@@ -17,10 +17,11 @@ public class GuessingGame extends JFrame {
 
 	private JLabel lblPrompt;
 	private JLabel lblOutput;
+	private JLabel lblNumTries;
 	
 	private int theNumber;
 	private int level = 1;
-	
+	private int attempts = 0;
 
 
 	public static void main(String[] args) {
@@ -63,13 +64,19 @@ public class GuessingGame extends JFrame {
 				checkGuess();
 			}
 		});
-		btnGuess.setBounds(171, 174, 114, 25);
+		btnGuess.setBounds(170, 147, 114, 25);
 		getContentPane().add(btnGuess);
 		
 		lblOutput = new JLabel("Enter a number above & click Guess!");
 		lblOutput.setHorizontalAlignment(SwingConstants.CENTER);
-		lblOutput.setBounds(12, 211, 420, 46);
+		lblOutput.setBounds(12, 184, 420, 40);
 		getContentPane().add(lblOutput);
+
+		lblNumTries = new JLabel("You guessed in n tries!");
+		lblNumTries.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNumTries.setVisible(false);
+		lblNumTries.setBounds(12, 225, 420, 40);
+		getContentPane().add(lblNumTries);
 		
 		//radio buttons added to give the difficulty selection, abandoned for now
 		JRadioButton rdbtnEasy = new JRadioButton("Easy");
@@ -91,9 +98,11 @@ public class GuessingGame extends JFrame {
 		rdbtnCrazy.setBounds(335, 60, 85, 23);
 		rdbtnCrazy.setVisible(false);
 		getContentPane().add(rdbtnCrazy);
+		
 	}
 	
 	public void newGame() {
+		attempts = 0;
 		theNumber = (int)(Math.random() * Math.pow(10, level) + 1);
 	}//newGame/
 	
@@ -102,15 +111,16 @@ public class GuessingGame extends JFrame {
 		String guessText = tiGuess.getText();
 		String msg = "";
 		try {
-			
+			attempts++;
 			int guess = Integer.parseInt(guessText);
 			
-	
 			if( guess == theNumber ) {
 				msg = "Correct, the number is " + theNumber + "!"
-						+ " Keep going. Guess the new number!"
+//						+ " Keep going. Guess the new number!"
 						;
-	//					+ "\nYou guessed right in " + guesses + " guesses!";
+				String tries = attempts == 1 ? " try!" : " tries!";
+				lblNumTries.setText("\nYou guessed right in " + attempts + tries);
+				lblNumTries.setVisible(true);
 				newGame();
 			} 
 			else if( guess > theNumber ) {
