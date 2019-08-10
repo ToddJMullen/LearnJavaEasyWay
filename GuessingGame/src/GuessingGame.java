@@ -8,6 +8,8 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JRadioButton;
+import javax.swing.JToolBar;
 
 public class GuessingGame extends JFrame {
 	
@@ -61,13 +63,34 @@ public class GuessingGame extends JFrame {
 				checkGuess();
 			}
 		});
-		btnGuess.setBounds(178, 147, 114, 25);
+		btnGuess.setBounds(171, 174, 114, 25);
 		getContentPane().add(btnGuess);
 		
 		lblOutput = new JLabel("Enter a number above & click Guess!");
 		lblOutput.setHorizontalAlignment(SwingConstants.CENTER);
 		lblOutput.setBounds(12, 211, 420, 46);
 		getContentPane().add(lblOutput);
+		
+		//radio buttons added to give the difficulty selection, abandoned for now
+		JRadioButton rdbtnEasy = new JRadioButton("Easy");
+		rdbtnEasy.setBounds(20, 62, 85, 23);
+		rdbtnEasy.setVisible(false);
+		getContentPane().add(rdbtnEasy);
+		
+		JRadioButton rdbtnMedium = new JRadioButton("Medium");
+		rdbtnMedium.setBounds(125, 62, 85, 23);
+		rdbtnMedium.setVisible(false);
+		getContentPane().add(rdbtnMedium);
+		
+		JRadioButton rdbtnHard = new JRadioButton("Hard");
+		rdbtnHard.setBounds(230, 62, 85, 23);
+		rdbtnHard.setVisible(false);
+		getContentPane().add(rdbtnHard);
+		
+		JRadioButton rdbtnCrazy = new JRadioButton("Crazy");
+		rdbtnCrazy.setBounds(335, 60, 85, 23);
+		rdbtnCrazy.setVisible(false);
+		getContentPane().add(rdbtnCrazy);
 	}
 	
 	public void newGame() {
@@ -107,5 +130,4 @@ public class GuessingGame extends JFrame {
 		
 		
 	}//checkGuess/
-	
 }
