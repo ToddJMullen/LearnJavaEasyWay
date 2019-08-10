@@ -19,6 +19,9 @@ public class GuessingGame extends JFrame {
 	private JLabel lblOutput;
 	private JLabel lblNumTries;
 	
+	private JButton btnGuess;
+	private JButton btnPlayAgain;
+	
 	private int theNumber;
 	private int level = 1;
 	private int attempts = 0;
@@ -58,13 +61,13 @@ public class GuessingGame extends JFrame {
 		getContentPane().add(tiGuess);
 		tiGuess.setColumns(10);
 		
-		JButton btnGuess = new JButton("Guess!");
+		btnGuess = new JButton("Guess!");
 		btnGuess.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				checkGuess();
 			}
 		});
-		btnGuess.setBounds(170, 147, 114, 25);
+		btnGuess.setBounds(170, 145, 114, 25);
 		getContentPane().add(btnGuess);
 		
 		lblOutput = new JLabel("Enter a number above & click Guess!");
@@ -99,9 +102,24 @@ public class GuessingGame extends JFrame {
 		rdbtnCrazy.setVisible(false);
 		getContentPane().add(rdbtnCrazy);
 		
+		btnPlayAgain = new JButton("Play Again!");
+		btnPlayAgain.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				newGame();
+			}
+		});
+		btnPlayAgain.setBounds(170, 145, 114, 25);
+		btnPlayAgain.setVisible(false);
+		getContentPane().add(btnPlayAgain);
+		
 	}
 	
 	public void newGame() {
+		btnPlayAgain.setVisible(false);
+		btnGuess.setVisible(true);
+		lblNumTries.setVisible(false);
+		lblOutput.setText("Game On!");
+		tiGuess.setText("");
 		attempts = 0;
 		theNumber = (int)(Math.random() * Math.pow(10, level) + 1);
 	}//newGame/
@@ -115,13 +133,15 @@ public class GuessingGame extends JFrame {
 			int guess = Integer.parseInt(guessText);
 			
 			if( guess == theNumber ) {
-				msg = "Correct, the number is " + theNumber + "!"
+				msg = "Correct! The number is " + theNumber + "!"
 //						+ " Keep going. Guess the new number!"
 						;
 				String tries = attempts == 1 ? " try!" : " tries!";
-				lblNumTries.setText("\nYou guessed right in " + attempts + tries);
+				lblNumTries.setText("You guessed right in " + attempts + tries);
 				lblNumTries.setVisible(true);
-				newGame();
+				btnGuess.setVisible(false);
+				btnPlayAgain.setVisible(true);
+//				newGame();
 			} 
 			else if( guess > theNumber ) {
 				msg = guess + " is too high. Try again.";
