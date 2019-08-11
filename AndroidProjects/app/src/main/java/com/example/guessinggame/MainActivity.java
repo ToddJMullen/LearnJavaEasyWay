@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private int theNumber;
     private int level = 1;
     private int max;
+    private int attempts;
 
 
     @Override
@@ -114,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         if( rbCrazy.isChecked() ) {
             level = 5;
         }
-//        attempts = 0;
+        attempts = 0;
         max = (int)Math.pow(10, level);
         lblOutput.setText("");
         lblPrompt.setText("Enter a number between 1 - " + max );
@@ -126,8 +127,6 @@ public class MainActivity extends AppCompatActivity {
         btnPlayAgain.setVisibility(View.INVISIBLE);
         rbLevels.setVisibility(View.INVISIBLE);
 
-//        lblPrompt.setText("Guess a number between 1 & " + max);
-//        boxPrompt.setVisible(true);
     }//newGame/
 
 
@@ -136,24 +135,19 @@ public class MainActivity extends AppCompatActivity {
         String msg = "";
 
         try {
-//            attempts++;
+            attempts++;
             int guess = Integer.parseInt(guessText);
 
             if( guess == theNumber ) {
                 msg = "Correct! The number is " + theNumber + "!"
 //						+ " Keep going. Guess the new number!"
                 ;
-//                String tries = attempts == 1 ? " try!" : " tries!";
-//                lblNumTries.setText("You guessed right in " + attempts + tries);
+                String tries = attempts == 1 ? " try!" : " tries!";
+                lblPrompt.setText("You guessed right in " + attempts + tries);
+
                 btnGuess.setVisibility(View.INVISIBLE);
                 btnPlayAgain.setVisibility(View.VISIBLE);
                 rbLevels.setVisibility(View.VISIBLE);
-
-//                lblNumTries.setVisible(true);
-//                boxPrompt.setVisible(false);
-//                boxLevels.setVisible(true);
-//                btnPlayAgain.setVisible(true);
-//				newGame();
             }
             else if( guess > theNumber ) {
                 msg = guess + " is too high. Try again.";
