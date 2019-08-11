@@ -20,11 +20,61 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText tiGuess;
     private Button btnGuess;
+    private Button btnPlayAgain;
     private TextView lblOutput;
 
     private int theNumber;
     private int level = 1;
     private int max;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        //bind the gui elements
+        tiGuess         = (EditText) findViewById(R.id.tiGuess);
+        btnGuess        = (Button) findViewById(R.id.btnGuess);
+        btnPlayAgain    = (Button) findViewById(R.id.btnPlayAgain);
+        lblOutput       = (TextView) findViewById(R.id.lblOutput);
+
+        newGame();
+
+        btnGuess.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                checkGuess();
+            }
+        });
+        tiGuess.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                checkGuess();
+                return true;//return true mean don't close the keyboard
+            }
+        });
+        btnPlayAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                newGame();
+            }
+        });
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+    }
+
+
 
 
 
@@ -33,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
 //        btnPlayAgain.setVisible(false);
 //        btnGuess.setVisible(true);
         tiGuess.setText("");
+        btnGuess.setVisibility(View.VISIBLE);
+        btnPlayAgain.setVisibility(View.INVISIBLE);
 //        if( rdbtnEasy.isSelected() ) {
 //            level = 1;
 //        }
@@ -67,7 +119,8 @@ public class MainActivity extends AppCompatActivity {
                 ;
 //                String tries = attempts == 1 ? " try!" : " tries!";
 //                lblNumTries.setText("You guessed right in " + attempts + tries);
-//                btnGuess.setVisible(false);//
+                btnGuess.setVisibility(View.INVISIBLE);
+                btnPlayAgain.setVisibility(View.VISIBLE);
 
 //                lblNumTries.setVisible(true);
 //                boxPrompt.setVisible(false);
@@ -97,44 +150,10 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        //bind the gui elements
-        tiGuess     = (EditText) findViewById(R.id.tiGuess);
-        btnGuess    = (Button) findViewById(R.id.btnGuess);
-        lblOutput   = (TextView) findViewById(R.id.lblOutput);
 
-        newGame();
 
-        btnGuess.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                checkGuess();
-            }
-        });
-        tiGuess.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                checkGuess();
-                return true;//return true mean don't close the keyboard
-            }
-        });
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
