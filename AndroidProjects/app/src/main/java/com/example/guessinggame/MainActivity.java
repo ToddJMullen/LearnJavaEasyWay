@@ -21,6 +21,81 @@ public class MainActivity extends AppCompatActivity {
     private Button btnGuess;
     private TextView lblOutput;
 
+    private int theNumber;
+    private int level = 1;
+    private int max;
+
+
+
+    public void newGame() {
+//        boxLevels.setVisible(false);
+//        btnPlayAgain.setVisible(false);
+//        btnGuess.setVisible(true);
+        tiGuess.setText("");
+//        if( rdbtnEasy.isSelected() ) {
+//            level = 1;
+//        }
+//        if( rdbtnMedium.isSelected() ) {
+//            level = 2;
+//        }
+//        if( rdbtnHard.isSelected() ) {
+//            level = 3;
+//        }
+//        if( rdbtnCrazy.isSelected() ) {
+//            level = 5;
+//        }
+//        attempts = 0;
+        max = (int)Math.pow(10, level);
+        theNumber = (int)(Math.random() * max  + 1);
+//        lblPrompt.setText("Guess a number between 1 & " + max);
+//        boxPrompt.setVisible(true);
+    }//newGame/
+
+
+    public void checkGuess() {
+        String guessText = tiGuess.getText().toString();
+        String msg = "";
+
+        try {
+//            attempts++;
+            int guess = Integer.parseInt(guessText);
+
+            if( guess == theNumber ) {
+                msg = "Correct! The number is " + theNumber + "!"
+//						+ " Keep going. Guess the new number!"
+                ;
+//                String tries = attempts == 1 ? " try!" : " tries!";
+//                lblNumTries.setText("You guessed right in " + attempts + tries);
+//                btnGuess.setVisible(false);//
+
+//                lblNumTries.setVisible(true);
+//                boxPrompt.setVisible(false);
+//                boxLevels.setVisible(true);
+//                btnPlayAgain.setVisible(true);
+//				newGame();
+            }
+            else if( guess > theNumber ) {
+                msg = guess + " is too high. Try again.";
+            }
+            else {
+                msg = guess + " is too low. Try again.";
+            }
+
+
+        } catch( Exception e ) {
+            msg = "Enter a whole number between 1 and " + max;
+        } finally {
+
+            lblOutput.setText(msg);
+            tiGuess.requestFocus();
+            tiGuess.selectAll();
+        }
+
+
+    }//checkGuess/
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +106,14 @@ public class MainActivity extends AppCompatActivity {
         btnGuess    = (Button) findViewById(R.id.btnGuess);
         lblOutput   = (TextView) findViewById(R.id.lblOutput);
 
+        newGame();
+
+        btnGuess.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                checkGuess();
+            }
+        });
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
