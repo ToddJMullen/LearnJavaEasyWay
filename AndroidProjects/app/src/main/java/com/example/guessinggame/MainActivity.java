@@ -14,14 +14,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     private EditText tiGuess;
+
     private Button btnGuess;
     private Button btnPlayAgain;
+
     private TextView lblOutput;
+    private TextView lblPrompt;
+    private TextView lblAnswer;
+
+    private RadioButton rbEasy;
+    private RadioButton rbMedium;
+    private RadioButton rbHard;
+    private RadioButton rbCrazy;
+    private RadioGroup  rbLevels;
 
     private int theNumber;
     private int level = 1;
@@ -38,6 +50,13 @@ public class MainActivity extends AppCompatActivity {
         btnGuess        = (Button) findViewById(R.id.btnGuess);
         btnPlayAgain    = (Button) findViewById(R.id.btnPlayAgain);
         lblOutput       = (TextView) findViewById(R.id.lblOutput);
+        lblAnswer       = (TextView) findViewById(R.id.lblAnswer);
+        lblPrompt       = (TextView) findViewById(R.id.lblPrompt);
+        rbEasy          = (RadioButton) findViewById(R.id.rbEasy);
+        rbMedium        = (RadioButton) findViewById(R.id.rbMedium);
+        rbHard          = (RadioButton) findViewById(R.id.rbHard);
+        rbCrazy         = (RadioButton) findViewById(R.id.rbCrazy);
+        rbLevels        = (RadioGroup) findViewById(R.id.rbLevels);
 
         newGame();
 
@@ -83,23 +102,30 @@ public class MainActivity extends AppCompatActivity {
 //        btnPlayAgain.setVisible(false);
 //        btnGuess.setVisible(true);
         tiGuess.setText("");
-        btnGuess.setVisibility(View.VISIBLE);
-        btnPlayAgain.setVisibility(View.INVISIBLE);
-//        if( rdbtnEasy.isSelected() ) {
-//            level = 1;
-//        }
-//        if( rdbtnMedium.isSelected() ) {
-//            level = 2;
-//        }
-//        if( rdbtnHard.isSelected() ) {
-//            level = 3;
-//        }
-//        if( rdbtnCrazy.isSelected() ) {
-//            level = 5;
-//        }
+        if( rbEasy.isChecked() ) {
+            level = 1;
+        }
+        if( rbMedium.isChecked() ) {
+            level = 2;
+        }
+        if( rbHard.isChecked() ) {
+            level = 3;
+        }
+        if( rbCrazy.isChecked() ) {
+            level = 5;
+        }
 //        attempts = 0;
         max = (int)Math.pow(10, level);
+        lblOutput.setText("");
+        lblPrompt.setText("Enter a number between 1 - " + max );
+        tiGuess.setHint("1 - " + max );
         theNumber = (int)(Math.random() * max  + 1);
+        lblAnswer.setText("Cheat: " + theNumber );
+
+        btnGuess.setVisibility(View.VISIBLE);
+        btnPlayAgain.setVisibility(View.INVISIBLE);
+        rbLevels.setVisibility(View.INVISIBLE);
+
 //        lblPrompt.setText("Guess a number between 1 & " + max);
 //        boxPrompt.setVisible(true);
     }//newGame/
@@ -121,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
 //                lblNumTries.setText("You guessed right in " + attempts + tries);
                 btnGuess.setVisibility(View.INVISIBLE);
                 btnPlayAgain.setVisibility(View.VISIBLE);
+                rbLevels.setVisibility(View.VISIBLE);
 
 //                lblNumTries.setVisible(true);
 //                boxPrompt.setVisible(false);
