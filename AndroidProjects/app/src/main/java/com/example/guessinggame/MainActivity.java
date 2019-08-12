@@ -1,6 +1,7 @@
 package com.example.guessinggame;
 
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuInflater;
@@ -63,6 +65,9 @@ public class MainActivity extends AppCompatActivity{
 		rbHard = (RadioButton) findViewById(R.id.rbHard);
 		rbCrazy = (RadioButton) findViewById(R.id.rbCrazy);
 		rbLevels = (RadioGroup) findViewById(R.id.rbLevels);
+
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		level = prefs.getInt("level", 1 );//pref name + fallback if DNE
 
 		newGame();
 
@@ -200,7 +205,7 @@ public class MainActivity extends AppCompatActivity{
 			msg = "Enter a whole number between 1 and " + max;
 		} finally {
 
-			Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG);//doesn't seem to do anything (in emulator?)
+			Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();//doesn't seem to do anything (in emulator?)
 
 			lblOutput.setText(msg);
 			tiGuess.requestFocus();
@@ -223,6 +228,7 @@ public class MainActivity extends AppCompatActivity{
 				Log.i("promptSettings/", "Level clicked:" + i );
 				level = i;
 				newGame();
+				storeSettings();
 			}
 		});
 		AlertDialog alert = builder.create();
@@ -243,6 +249,14 @@ public class MainActivity extends AppCompatActivity{
 				});
 		aboutDialog.show();
 	}//openAbout
+
+
+	public void storeSettings(){
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putInt("level", level );
+		editor.apply();
+	}//storeSettings
 
 
 }//MainActivity
