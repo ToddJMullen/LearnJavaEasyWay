@@ -166,6 +166,7 @@ public class MainActivity extends AppCompatActivity{
 				newGame();
 				return true;
 			case R.id.action_gamestats:
+				openStats();
 				return true;
 			case R.id.action_about:
 				openAbout();
@@ -194,6 +195,12 @@ public class MainActivity extends AppCompatActivity{
 				btnGuess.setVisibility(View.INVISIBLE);
 				btnPlayAgain.setVisibility(View.VISIBLE);
 //				rbLevels.setVisibility(View.VISIBLE);
+				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+				int numWins = prefs.getInt("numWins", 0 ) + 1;
+				SharedPreferences.Editor editor = prefs.edit();
+				editor.putInt("numWins", numWins );
+				editor.apply();
+
 			} else if( guess > theNumber ){
 				msg = guess + " is too high. Try again.";
 			} else {
@@ -229,11 +236,29 @@ public class MainActivity extends AppCompatActivity{
 				level = i;
 				newGame();
 				storeSettings();
+				dialogInterface.dismiss();
 			}
 		});
 		AlertDialog alert = builder.create();
 		alert.show();
 	}//promptSettings/
+
+
+	public void openStats(){
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		int numWins = prefs.getInt("numWins", 0 );
+		AlertDialog dlgStats = new AlertDialog.Builder(MainActivity.this).create();
+		dlgStats.setTitle("Guessing Game Stats");
+		dlgStats.setMessage("You have won a total of " + numWins + " games (all time). Nice Job!");
+		dlgStats.setButton(AlertDialog.BUTTON_NEUTRAL, "OK"
+				, new DialogInterface.OnClickListener(){
+					@Override
+					public void onClick( DialogInterface dialogInterface, int i ){
+						dialogInterface.dismiss();
+					}
+		});
+		dlgStats.show();
+	}//openStats/
 
 
 	public void openAbout(){
@@ -244,7 +269,7 @@ public class MainActivity extends AppCompatActivity{
 				, new DialogInterface.OnClickListener(){
 					@Override
 					public void onClick( DialogInterface dialogInterface, int i ){
-						aboutDialog.dismiss();
+						dialogInterface.dismiss();
 					}
 				});
 		aboutDialog.show();
