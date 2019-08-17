@@ -12,9 +12,10 @@ public class SecretMessages {
 		String str = cli.nextLine();
 		
 		String output = "";
+		char key = 13;
 		
-		for( int idx = str.length()-1; idx >= 0; idx-- ) {
-			output += str.charAt(idx);
+		for( int idx = 0; idx < str.length(); idx++ ) {
+			output += (char) key + str.charAt(idx);
 		}
 		
 		System.out.println("Output:\n" + output);
