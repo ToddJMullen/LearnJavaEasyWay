@@ -103,9 +103,17 @@
         android:id="@+id/rbLevels"
         android:layout_width="395dp"
         android:layout_height="129dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="11dp"
         android:visibility="invisible"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="229dp">
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnPlayAgain">
 
         <RadioButton
             android:id="@+id/rbEasy"
@@ -135,5 +143,40 @@
             android:layout_height="wrap_content"
             android:text="Crazy" />
     </RadioGroup>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="395dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnPlayAgain"
+        app:layout_constraintVertical_bias="0.88">
+
+        <TextView
+            android:id="@+id/lblNumGames"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="games" />
+
+        <TextView
+            android:id="@+id/lblNumWins"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="wins" />
+
+        <TextView
+            android:id="@+id/lblNumLosses"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="loses" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

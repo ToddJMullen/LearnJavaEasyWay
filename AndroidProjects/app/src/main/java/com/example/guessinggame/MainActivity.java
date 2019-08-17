@@ -25,7 +25,18 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 public class MainActivity extends AppCompatActivity{
+
+	private static int MAX_TRIES = 3;
+
+	private static String NAME_NUM_GAMES	= "numGames";
+	private static String NAME_LOSSES		= "numLosses";
+	private static String NAME_LEVEL		= "level";
+	private static String NAME_WINS			= "numWins";
+
+	SharedPreferences			prefs;
+	SharedPreferences.Editor	history;
 
 	private EditText tiGuess;
 
@@ -35,6 +46,9 @@ public class MainActivity extends AppCompatActivity{
 	private TextView lblOutput;
 	private TextView lblPrompt;
 	private TextView lblAnswer;
+	private TextView lblNumGames;
+	private TextView lblNumLosses;
+	private TextView lblNumWins;
 
 	private RadioButton rbEasy;
 	private RadioButton rbMedium;
@@ -45,7 +59,10 @@ public class MainActivity extends AppCompatActivity{
 	private int theNumber;
 	private int level = 1;
 	private int max;
-	private int attempts;
+	private int tries;
+	private int numGames;
+	private int numWins;
+	private int numLosses;
 
 
 	@Override
@@ -54,20 +71,25 @@ public class MainActivity extends AppCompatActivity{
 		setContentView(R.layout.activity_main);
 
 		//bind the gui elements
-		tiGuess = (EditText) findViewById(R.id.tiGuess);
-		btnGuess = (Button) findViewById(R.id.btnGuess);
-		btnPlayAgain = (Button) findViewById(R.id.btnPlayAgain);
-		lblOutput = (TextView) findViewById(R.id.lblOutput);
-		lblAnswer = (TextView) findViewById(R.id.lblAnswer);
-		lblPrompt = (TextView) findViewById(R.id.lblPrompt);
-		rbEasy = (RadioButton) findViewById(R.id.rbEasy);
-		rbMedium = (RadioButton) findViewById(R.id.rbMedium);
-		rbHard = (RadioButton) findViewById(R.id.rbHard);
-		rbCrazy = (RadioButton) findViewById(R.id.rbCrazy);
-		rbLevels = (RadioGroup) findViewById(R.id.rbLevels);
+		tiGuess 		= (EditText) findViewById(R.id.tiGuess);
+		btnGuess		= (Button) findViewById(R.id.btnGuess);
+		btnPlayAgain	= (Button) findViewById(R.id.btnPlayAgain);
+		lblOutput 		= (TextView) findViewById(R.id.lblOutput);
+		lblAnswer 		= (TextView) findViewById(R.id.lblAnswer);
+		lblPrompt 		= (TextView) findViewById(R.id.lblPrompt);
+		lblNumGames		= (TextView) findViewById(R.id.lblNumGames);
+		lblNumWins		= (TextView) findViewById(R.id.lblNumWins);
+		lblNumLosses	= (TextView) findViewById(R.id.lblNumLosses);
+//		rbEasy 			= (RadioButton) findViewById(R.id.rbEasy);
+//		rbMedium 		= (RadioButton) findViewById(R.id.rbMedium);
+//		rbHard 			= (RadioButton) findViewById(R.id.rbHard);
+//		rbCrazy 		= (RadioButton) findViewById(R.id.rbCrazy);
+//		rbLevels 		= (RadioGroup) findViewById(R.id.rbLevels);
 
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		level = prefs.getInt("level", 1 );//pref name + fallback if DNE
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		history = prefs.edit();
+
+		level	= prefs.getInt(NAME_LEVEL, 1 );//pref name , 1 => fallback if DNE
 
 		newGame();
 
@@ -109,7 +131,6 @@ public class MainActivity extends AppCompatActivity{
 //        boxLevels.setVisible(false);
 //        btnPlayAgain.setVisible(false);
 //        btnGuess.setVisible(true);
-		tiGuess.setText("");
 //		if( rbEasy.isChecked() ){
 //			level = 1;
 //		}
@@ -122,7 +143,19 @@ public class MainActivity extends AppCompatActivity{
 //		if( rbCrazy.isChecked() ){
 //			level = 5;
 //		}
-		attempts = 0;
+
+		numGames	= prefs.getInt( NAME_NUM_GAMES, 0 ) + 1;
+		numWins		= prefs.getInt(NAME_WINS, 0 );
+		numLosses	= prefs.getInt(NAME_LOSSES, 0 );
+
+		history.putInt( NAME_NUM_GAMES, numGames );
+		history.apply();
+
+		writeStats();
+
+
+		tiGuess.setText("");
+		tries = 0;
 		max = (int) Math.pow(10, level);
 		lblOutput.setText("");
 		lblPrompt.setText("Enter a number between 1 - " + max);
@@ -132,9 +165,148 @@ public class MainActivity extends AppCompatActivity{
 
 		btnGuess.setVisibility(View.VISIBLE);
 		btnPlayAgain.setVisibility(View.INVISIBLE);
-		rbLevels.setVisibility(View.INVISIBLE);
+//		rbLevels.setVisibility(View.INVISIBLE);
 
 	}//newGame/
+
+
+	public void writeStats(){
+		lblNumGames		.setText( numGames + " Games");
+		lblNumWins		.setText( numWins + " Wins");
+		lblNumLosses	.setText( numLosses + " Losses");
+	}
+
+
+	public void checkGuess(){
+		String guessText = tiGuess.getText().toString();
+		String msg = "";
+
+		try{
+			tries++;
+			int guess = Integer.parseInt(guessText);
+
+			if( tries <= MAX_TRIES ){
+				if( guess == theNumber ){
+					msg = "Correct! The number is " + theNumber + "!"
+//						+ " Keep going. Guess the new number!"
+					;
+					String noun = tries == 1 ? " try!" : " tries!";
+					lblPrompt.setText("You guessed right in " + tries + noun);
+
+					btnGuess.setVisibility(View.INVISIBLE);
+					btnPlayAgain.setVisibility(View.VISIBLE);
+//				rbLevels.setVisibility(View.VISIBLE);
+//					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+					numWins = prefs.getInt(NAME_WINS, 0 ) + 1;
+					history.putInt(NAME_WINS, numWins );
+					history.apply();
+//					SharedPreferences.Editor editor = prefs.edit();
+//					editor.putInt("numWins", numWins );
+//					editor.apply();
+
+				} else if( guess > theNumber ){
+					msg = guess + " is too high. Try again.";
+				} else {
+					msg = guess + " is too low. Try again.";
+				}
+			}
+			else {
+				msg = "You lose dirtbag!";
+				lblPrompt.setText(msg);
+//				lblPrompt.setTextSize(25);
+				btnGuess.setVisibility(View.INVISIBLE);
+				btnPlayAgain.setVisibility(View.VISIBLE);
+
+				numLosses = 1 + prefs.getInt(NAME_LOSSES, 0 );
+				history.putInt(NAME_LOSSES, numLosses );
+				history.apply();
+			}
+
+
+		} catch ( Exception e ){
+			msg = "Enter a whole number between 1 and " + max;
+
+		} finally {
+
+			Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();//doesn't seem to do anything (in emulator?)
+
+			lblOutput.setText(msg);
+//			lblPrompt.setTextSize(11);
+			tiGuess.requestFocus();
+			tiGuess.selectAll();
+			writeStats();
+		}
+
+
+	}//checkGuess/
+
+
+
+	public void promptSettings(){
+//		final CharSequence[] items = {"1 to 10","1 to 100","1 to 1000"};
+		final CharSequence[] items = {"Easy","Medium","Hard","Crazy"};
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Select Difficulty");
+		builder.setItems(items, new DialogInterface.OnClickListener(){
+			@Override
+			public void onClick( DialogInterface dialogInterface, int i ){
+				i++;
+				Log.i("promptSettings/", "Level clicked:" + i );
+				level = i;
+				newGame();
+				storeSettings();
+				dialogInterface.dismiss();
+			}
+		});
+		AlertDialog alert = builder.create();
+		alert.show();
+	}//promptSettings/
+
+
+
+	public void openStats(){
+//		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+//		int numWins = prefs.getInt( NAME_WINS, 0 );
+		AlertDialog dlgStats = new AlertDialog.Builder(MainActivity.this).create();
+		dlgStats.setTitle("Guessing Game Stats");
+		float pctWin = (float) 100 * numWins/numGames;
+		float pctLose = (float) 100 * numLosses/numGames;
+		String msg = "Nice Job!";
+		if( pctWin < pctLose ){
+			msg = "You Suck!";
+		}
+		dlgStats.setMessage(
+			"You have played a total of " + numGames + " games (all time)."
+			+ numWins + " Wins " + pctWin + "% & " + numLosses + " Losses " + pctLose + "%"
+			+ " " + msg
+		);
+		dlgStats.setButton(AlertDialog.BUTTON_NEUTRAL, "OK"
+				, new DialogInterface.OnClickListener(){
+					@Override
+					public void onClick( DialogInterface dialogInterface, int i ){
+						dialogInterface.dismiss();
+					}
+		});
+		dlgStats.show();
+	}//openStats/
+
+
+
+	public void openAbout(){
+		final AlertDialog aboutDialog = new AlertDialog.Builder(MainActivity.this).create();
+		aboutDialog.setTitle("About Guessing Game");
+		aboutDialog.setMessage("(c) 2019 Todd Mullen");
+		aboutDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK"
+				, new DialogInterface.OnClickListener(){
+					@Override
+					public void onClick( DialogInterface dialogInterface, int i ){
+						dialogInterface.dismiss();
+					}
+				});
+		aboutDialog.show();
+	}//openAbout
+
 
 
 	@Override
@@ -177,110 +349,15 @@ public class MainActivity extends AppCompatActivity{
 	}//onOptionsItemSelected/
 
 
-	public void checkGuess(){
-		String guessText = tiGuess.getText().toString();
-		String msg = "";
-
-		try{
-			attempts++;
-			int guess = Integer.parseInt(guessText);
-
-			if( guess == theNumber ){
-				msg = "Correct! The number is " + theNumber + "!"
-//						+ " Keep going. Guess the new number!"
-				;
-				String tries = attempts == 1 ? " try!" : " tries!";
-				lblPrompt.setText("You guessed right in " + attempts + tries);
-
-				btnGuess.setVisibility(View.INVISIBLE);
-				btnPlayAgain.setVisibility(View.VISIBLE);
-//				rbLevels.setVisibility(View.VISIBLE);
-				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-				int numWins = prefs.getInt("numWins", 0 ) + 1;
-				SharedPreferences.Editor editor = prefs.edit();
-				editor.putInt("numWins", numWins );
-				editor.apply();
-
-			} else if( guess > theNumber ){
-				msg = guess + " is too high. Try again.";
-			} else {
-				msg = guess + " is too low. Try again.";
-			}
-
-
-		} catch ( Exception e ){
-			msg = "Enter a whole number between 1 and " + max;
-		} finally {
-
-			Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();//doesn't seem to do anything (in emulator?)
-
-			lblOutput.setText(msg);
-			tiGuess.requestFocus();
-			tiGuess.selectAll();
-		}
-
-
-	}//checkGuess/
-
-
-	public void promptSettings(){
-//		final CharSequence[] items = {"1 to 10","1 to 100","1 to 1000"};
-		final CharSequence[] items = {"Easy","Medium","Hard","Crazy"};
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("Select Difficulty");
-		builder.setItems(items, new DialogInterface.OnClickListener(){
-			@Override
-			public void onClick( DialogInterface dialogInterface, int i ){
-				i++;
-				Log.i("promptSettings/", "Level clicked:" + i );
-				level = i;
-				newGame();
-				storeSettings();
-				dialogInterface.dismiss();
-			}
-		});
-		AlertDialog alert = builder.create();
-		alert.show();
-	}//promptSettings/
-
-
-	public void openStats(){
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		int numWins = prefs.getInt("numWins", 0 );
-		AlertDialog dlgStats = new AlertDialog.Builder(MainActivity.this).create();
-		dlgStats.setTitle("Guessing Game Stats");
-		dlgStats.setMessage("You have won a total of " + numWins + " games (all time). Nice Job!");
-		dlgStats.setButton(AlertDialog.BUTTON_NEUTRAL, "OK"
-				, new DialogInterface.OnClickListener(){
-					@Override
-					public void onClick( DialogInterface dialogInterface, int i ){
-						dialogInterface.dismiss();
-					}
-		});
-		dlgStats.show();
-	}//openStats/
-
-
-	public void openAbout(){
-		final AlertDialog aboutDialog = new AlertDialog.Builder(MainActivity.this).create();
-		aboutDialog.setTitle("About Guessing Game");
-		aboutDialog.setMessage("(c) 2019 Todd Mullen");
-		aboutDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK"
-				, new DialogInterface.OnClickListener(){
-					@Override
-					public void onClick( DialogInterface dialogInterface, int i ){
-						dialogInterface.dismiss();
-					}
-				});
-		aboutDialog.show();
-	}//openAbout
 
 
 	public void storeSettings(){
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		SharedPreferences.Editor editor = prefs.edit();
-		editor.putInt("level", level );
-		editor.apply();
+		history.putInt(NAME_LEVEL, level);
+		history.apply();
+//		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+//		SharedPreferences.Editor editor = prefs.edit();
+//		editor.putInt("level", level );
+//		editor.apply();
 	}//storeSettings
 
 
