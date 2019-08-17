@@ -15,7 +15,18 @@ public class SecretMessages {
 		char key = 13;
 		
 		for( int idx = 0; idx < str.length(); idx++ ) {
-			output += (char) key + str.charAt(idx);
+			
+			char input = str.charAt(idx);
+			
+			if( input >= 'A' && input <= 'Z' ) {
+				input += key;
+				
+				if( input > 'Z' ) {
+					input -= 26;//shift it back into the uppercase range
+				}
+				
+			}
+			output += input;
 		}
 		
 		System.out.println("Output:\n" + output);
