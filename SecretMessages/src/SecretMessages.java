@@ -12,7 +12,9 @@ public class SecretMessages {
 		String str = cli.nextLine();
 		
 		String output = "";
-		char key = 13;
+		System.out.println("Enter a secret key (-25 - 25)");
+		int keyVal = Integer.parseInt(cli.nextLine());
+		char key = (char) keyVal;
 		
 		for( int idx = 0; idx < str.length(); idx++ ) {
 			
@@ -24,12 +26,18 @@ public class SecretMessages {
 				if( input > 'Z' ) {
 					input -= 26;//shift it back into the uppercase range
 				}
+				if( input < 'A' ) {
+					input += 26;
+				}
 				
 			} else if( input >= 'a' && input <= 'z' ) {
 				input += key;
 				
 				if( input > 'z' ) {
 					input -= 26;//shift it back into the lowercase range
+				}
+				if( input < 'a' ) {
+					input += 26;
 				}
 				
 			}
