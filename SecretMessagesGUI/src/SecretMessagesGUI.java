@@ -8,9 +8,18 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class SecretMessagesGUI extends JFrame {
+	
 	private JTextField tiKey;
 	private JTextArea taIn;
 	private JTextArea taOut;
+	
+
+	public static void main(String[] args) {
+		JFrame gui = new SecretMessagesGUI();
+		gui.setSize(600,400);
+		gui.setVisible(true);
+	}
+	
 	
 	public SecretMessagesGUI() {
 		setTitle("Todd's Secrete Message App!");
@@ -47,6 +56,8 @@ public class SecretMessagesGUI extends JFrame {
 					
 					String ciphertext = caesar(plaintext, key);
 					
+					ciphertext = stringReverse(ciphertext);
+					
 					taOut.setText(ciphertext);
 				} catch( Exception e ) {
 					//what to do?
@@ -55,12 +66,6 @@ public class SecretMessagesGUI extends JFrame {
 		});
 		btnEncodeDecode.setBounds(415, 168, 166, 27);
 		getContentPane().add(btnEncodeDecode);
-	}
-
-	public static void main(String[] args) {
-		JFrame gui = new SecretMessagesGUI();
-		gui.setSize(600,400);
-		gui.setVisible(true);;
 	}
 	
 
