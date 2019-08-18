@@ -26,12 +26,14 @@ public class SecretMessages {
 			}
 			key = ' ';
 			keyVal = 0;
+			boolean valid = false;
 			
-			while( keyVal == 0 ) {
+			while( !valid ) {
 				
 				try {
 					System.out.println("Enter a secret key (-25 & 25)");
 					keyVal = Integer.parseInt(cli.nextLine());
+					valid = keyVal >= -25 && keyVal <= 25;
 					key = (char) keyVal;
 					
 				} catch( Exception e ) {
