@@ -2,9 +2,11 @@ import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import java.awt.Insets;
@@ -75,9 +77,11 @@ public class SecretMessagesGUI extends JFrame {
 		btnEncodeDecode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					
+					ArrayList<String> errAry = new ArrayList<String>(2);
 					String plaintext = taIn.getText();
 					int key = Integer.parseInt(tiKey.getText());
+					
+
 					
 					String ciphertext = caesar(plaintext, key);
 					
@@ -86,6 +90,12 @@ public class SecretMessagesGUI extends JFrame {
 					taOut.setText(ciphertext);
 				} catch( Exception e ) {
 					//what to do?
+					tiKey.requestFocus();
+					tiKey.selectAll();
+					// null 1st param will center in the desktop window
+//					JOptionPane.showMessageDialog(null, "Please enter a number from -25 to 25 for the key" );
+					// getContentPane() will center on the applet body
+					JOptionPane.showMessageDialog(getContentPane(), "Please enter a number from -25 to 25 for the key" );
 				}
 			}
 		});
