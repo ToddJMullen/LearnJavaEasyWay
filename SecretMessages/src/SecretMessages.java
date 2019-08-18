@@ -42,6 +42,8 @@ public class SecretMessages {
 
 			
 			output = "";
+			str = stringReverse(str);
+			
 			for( int idx = 0; idx < str.length(); idx++ ) {
 				
 				char input = str.charAt(idx);
@@ -61,7 +63,15 @@ public class SecretMessages {
 		
 		cli.close();
 
-	}//main
+	}//main/
+	
+	private static String stringReverse( String str ) {
+		String rts = "";
+		for( int l = str.length()-1; l >= 0; l-- ) {
+			rts += str.charAt(l);
+		}
+		return rts;
+	}//stringReverse/
 	
 	
 	private static char encode( char input, int keyVal ) {
@@ -98,6 +108,6 @@ public class SecretMessages {
 			}
 		}
 		return input;
-	}
+	}//encode/
 
 }//SecretMessages
