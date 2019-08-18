@@ -77,10 +77,14 @@ public class SecretMessagesGUI extends JFrame {
 		btnEncodeDecode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					ArrayList<String> errAry = new ArrayList<String>(2);
+//					ArrayList<String> errAry = new ArrayList<String>(2);
 					String plaintext = taIn.getText();
 					int key = Integer.parseInt(tiKey.getText());
-					
+
+					if( plaintext.trim().length() == 0 ) {
+						JOptionPane.showMessageDialog(getContentPane(), "You haven't entered anything to be encoded!");
+						return;
+					}
 
 					
 					String ciphertext = caesar(plaintext, key);
