@@ -39,7 +39,14 @@ public class SecretMessages {
 				if( input < 'a' ) {
 					input += 26;
 				}
-				
+			} else if( input >= '0' && input <= '9' ) {
+				input += (keyVal % 10);
+				if( input > '9' ) {
+					input -= 10;
+				}
+				else if( input < '0' ) {
+					input += 10;
+				}
 			}
 			output += input;
 		}
