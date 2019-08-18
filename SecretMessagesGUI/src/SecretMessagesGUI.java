@@ -16,6 +16,8 @@ import javax.swing.border.SoftBevelBorder;
 
 public class SecretMessagesGUI extends JFrame {
 	
+	private static String DEFAULT_KEY = "3";
+	
 	private JTextField tiKey;
 	private JTextArea taIn;
 	private JTextArea taOut;
@@ -55,6 +57,7 @@ public class SecretMessagesGUI extends JFrame {
 		getContentPane().add(taOut);
 		
 		tiKey = new JTextField();
+		tiKey.setText(DEFAULT_KEY);
 		tiKey.setBackground(Color.LIGHT_GRAY);
 		tiKey.setFont(new Font("Comfortaa", Font.PLAIN, 20));
 		tiKey.setMargin(new Insets(3, 3, 3, 3));
