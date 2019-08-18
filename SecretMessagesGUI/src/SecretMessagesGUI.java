@@ -6,6 +6,11 @@ import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Font;
+import java.awt.Insets;
+import java.awt.Color;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.SoftBevelBorder;
 
 public class SecretMessagesGUI extends JFrame {
 	
@@ -16,37 +21,57 @@ public class SecretMessagesGUI extends JFrame {
 
 	public static void main(String[] args) {
 		JFrame gui = new SecretMessagesGUI();
-		gui.setSize(600,400);
+		gui.setSize(600,500);
 		gui.setVisible(true);
 	}
 	
 	
 	public SecretMessagesGUI() {
+		getContentPane().setBackground(Color.DARK_GRAY);
 		setTitle("Todd's Secrete Message App!");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		
 		taIn = new JTextArea();
+		taIn.setLineWrap(true);
+		taIn.setWrapStyleWord(true);
+		taIn.setBackground(Color.GRAY);
+		taIn.setFont(new Font("Comfortaa", Font.PLAIN, 20));
+		taIn.setMargin(new Insets(3, 3, 3, 3));
 		taIn.setToolTipText("Input Message");
-		taIn.setBounds(12, 0, 569, 127);
+		taIn.setBounds(12, 0, 569, 163);
 		getContentPane().add(taIn);
 		
 		taOut = new JTextArea();
+		taOut.setLineWrap(true);
+		taOut.setWrapStyleWord(true);
+		taOut.setBackground(Color.GRAY);
+		taOut.setFont(new Font("Comfortaa", Font.BOLD, 20));
+		taOut.setMargin(new Insets(3, 3, 3, 3));
 		taOut.setToolTipText("Decoded Message");
-		taOut.setBounds(12, 207, 569, 149);
+		taOut.setBounds(12, 282, 569, 175);
 		getContentPane().add(taOut);
 		
 		tiKey = new JTextField();
-		tiKey.setBounds(524, 139, 57, 27);
+		tiKey.setBackground(Color.LIGHT_GRAY);
+		tiKey.setFont(new Font("Comfortaa", Font.PLAIN, 20));
+		tiKey.setMargin(new Insets(3, 3, 3, 3));
+		tiKey.setBounds(522, 175, 57, 38);
 		getContentPane().add(tiKey);
 		tiKey.setColumns(10);
 		
 		JLabel lblKey = new JLabel("Key:");
 		lblKey.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblKey.setBounds(480, 139, 37, 27);
+		lblKey.setFont(new Font("Comfortaa", Font.PLAIN, 18));
+		lblKey.setForeground(Color.WHITE);
+		lblKey.setBounds(474, 183, 37, 27);
 		getContentPane().add(lblKey);
 		
 		JButton btnEncodeDecode = new JButton("Encode / Decode");
+		btnEncodeDecode.setFont(new Font("Comfortaa", Font.PLAIN, 22));
+		btnEncodeDecode.setForeground(Color.WHITE);
+		btnEncodeDecode.setBackground(Color.DARK_GRAY);
+		btnEncodeDecode.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, new Color(0, 128, 0), new Color(0, 128, 0), new Color(0, 128, 0), new Color(0, 128, 0)));
 		btnEncodeDecode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
@@ -64,7 +89,7 @@ public class SecretMessagesGUI extends JFrame {
 				}
 			}
 		});
-		btnEncodeDecode.setBounds(415, 168, 166, 27);
+		btnEncodeDecode.setBounds(359, 225, 222, 45);
 		getContentPane().add(btnEncodeDecode);
 	}
 	
