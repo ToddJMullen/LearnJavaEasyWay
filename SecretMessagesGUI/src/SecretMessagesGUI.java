@@ -1,30 +1,33 @@
-import javax.swing.JFrame;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.SwingConstants;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-//import java.util.ArrayList;
-import java.awt.event.ActionEvent;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Insets;
-import java.awt.Color;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.SoftBevelBorder;
-import javax.swing.JSlider;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JSlider;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class SecretMessagesGUI extends JFrame {
 	
+	/**
+	 * serialVersionUID not needed here, but added to remove warning
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private static String DEFAULT_KEY = "3";
 	
 	private JSlider		slKey;
