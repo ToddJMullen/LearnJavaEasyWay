@@ -6,21 +6,33 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import java.awt.Insets;
 import java.awt.Color;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class SecretMessagesGUI extends JFrame {
 	
 	private static String DEFAULT_KEY = "3";
 	
-	private JTextField tiKey;
-	private JTextArea taIn;
-	private JTextArea taOut;
+	private JSlider		slKey;
+	
+	private JTextField	tiKey;
+	
+	private JTextArea	taIn;
+	private JTextArea	taOut;
 	
 
 	public static void main(String[] args) {
@@ -32,7 +44,7 @@ public class SecretMessagesGUI extends JFrame {
 	
 	public SecretMessagesGUI() {
 		getContentPane().setBackground(Color.DARK_GRAY);
-		setTitle("Todd's Secrete Message App!");
+		setTitle("Todd's Secret Message App!");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		
@@ -57,6 +69,19 @@ public class SecretMessagesGUI extends JFrame {
 		getContentPane().add(taOut);
 		
 		tiKey = new JTextField();
+		tiKey.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				tiKey.selectAll();
+			}
+		});
+		tiKey.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				int key = Integer.parseInt(tiKey.getText());
+				slKey.setValue(key);
+			}
+		});
 		tiKey.setText(DEFAULT_KEY);
 		tiKey.setBackground(Color.LIGHT_GRAY);
 		tiKey.setFont(new Font("Comfortaa", Font.PLAIN, 20));
@@ -81,20 +106,11 @@ public class SecretMessagesGUI extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 //					ArrayList<String> errAry = new ArrayList<String>(2);
-					String plaintext = taIn.getText();
+
 					int key = Integer.parseInt(tiKey.getText());
-
-					if( plaintext.trim().length() == 0 ) {
-						JOptionPane.showMessageDialog(getContentPane(), "You haven't entered anything to be encoded!");
-						return;
-					}
-
 					
-					String ciphertext = caesar(plaintext, key);
+					encode( key );
 					
-					ciphertext = stringReverse(ciphertext);
-					
-					taOut.setText(ciphertext);
 				} catch( Exception e ) {
 					//what to do?
 					tiKey.requestFocus();
@@ -108,9 +124,44 @@ public class SecretMessagesGUI extends JFrame {
 		});
 		btnEncodeDecode.setBounds(359, 225, 222, 45);
 		getContentPane().add(btnEncodeDecode);
+		
+		slKey = new JSlider(-26,26);
+		slKey.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				int key = slKey.getValue();
+				tiKey.setText( "" + key );
+				encode( key );
+			}
+		});
+		slKey.setForeground(Color.WHITE);
+		slKey.setBackground(Color.DARK_GRAY);
+		slKey.setValue( Integer.parseInt(DEFAULT_KEY) );
+		slKey.setSnapToTicks(true);
+		slKey.setPaintTicks(true);
+		slKey.setPaintLabels(true);
+		slKey.setMinorTickSpacing(1);
+		slKey.setMajorTickSpacing(13);
+		slKey.setBounds(22, 175, 329, 84);
+		getContentPane().add(slKey);
 	}
 	
 
+	private void encode( int key ) {
+		
+		String plaintext = taIn.getText();
+
+//		if( plaintext.trim().length() == 0 ) {
+//			JOptionPane.showMessageDialog(getContentPane(), "You haven't entered anything to be encoded!");
+//			return;
+//		}
+		
+		String ciphertext = caesar(plaintext, key);
+		
+		ciphertext = stringReverse(ciphertext);
+		
+		taOut.setText(ciphertext);
+	}//encode/
+	
 	private static String stringReverse( String str ) {
 		String rts = "";
 		for( int l = str.length()-1; l >= 0; l-- ) {
@@ -160,5 +211,4 @@ public class SecretMessagesGUI extends JFrame {
 		
 		return csr;
 	}//caesar/
-
 }
