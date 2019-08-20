@@ -20,6 +20,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.JScrollPane;
 
 public class SecretMessagesGUI extends JFrame {
 	
@@ -36,6 +37,8 @@ public class SecretMessagesGUI extends JFrame {
 	
 	private JTextArea	taIn;
 	private JTextArea	taOut;
+	private JScrollPane scrollPane;
+	private JScrollPane scrollPane_1;
 	
 
 	public static void main(String[] args) {
@@ -51,25 +54,31 @@ public class SecretMessagesGUI extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(12, 0, 569, 163);
+		getContentPane().add(scrollPane);
+		
 		taIn = new JTextArea();
+		scrollPane.setViewportView(taIn);
 		taIn.setLineWrap(true);
 		taIn.setWrapStyleWord(true);
 		taIn.setBackground(Color.GRAY);
 		taIn.setFont(new Font("Comfortaa", Font.PLAIN, 20));
 		taIn.setMargin(new Insets(3, 3, 3, 3));
 		taIn.setToolTipText("Input Message");
-		taIn.setBounds(12, 0, 569, 163);
-		getContentPane().add(taIn);
+		
+		scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(12, 294, 569, 163);
+		getContentPane().add(scrollPane_1);
 		
 		taOut = new JTextArea();
+		scrollPane_1.setViewportView(taOut);
 		taOut.setLineWrap(true);
 		taOut.setWrapStyleWord(true);
 		taOut.setBackground(Color.GRAY);
 		taOut.setFont(new Font("Comfortaa", Font.BOLD, 20));
 		taOut.setMargin(new Insets(3, 3, 3, 3));
 		taOut.setToolTipText("Decoded Message");
-		taOut.setBounds(12, 294, 569, 163);
-		getContentPane().add(taOut);
 		
 		tiKey = new JTextField();
 		tiKey.addFocusListener(new FocusAdapter() {
