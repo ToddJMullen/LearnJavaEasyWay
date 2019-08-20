@@ -68,7 +68,7 @@ public class SecretMessagesGUI extends JFrame {
 		taOut.setFont(new Font("Comfortaa", Font.BOLD, 20));
 		taOut.setMargin(new Insets(3, 3, 3, 3));
 		taOut.setToolTipText("Decoded Message");
-		taOut.setBounds(12, 282, 569, 175);
+		taOut.setBounds(12, 294, 569, 163);
 		getContentPane().add(taOut);
 		
 		tiKey = new JTextField();
@@ -144,8 +144,24 @@ public class SecretMessagesGUI extends JFrame {
 		slKey.setPaintLabels(true);
 		slKey.setMinorTickSpacing(1);
 		slKey.setMajorTickSpacing(13);
-		slKey.setBounds(22, 175, 329, 84);
+		slKey.setBounds(22, 175, 329, 60);
 		getContentPane().add(slKey);
+		
+		JButton btnRecode = new JButton("^ Recode ^");
+		btnRecode.setBackground(Color.DARK_GRAY);
+		btnRecode.setForeground(Color.WHITE);
+		btnRecode.setFont(new Font("Comfortaa", Font.PLAIN, 16));
+		btnRecode.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, new Color(0, 128, 0), new Color(0, 128, 0), new Color(0, 128, 0), new Color(0, 128, 0)));
+		btnRecode.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String code = taOut.getText();
+				int inverse = (26 - slKey.getValue()) % 26;
+				taIn.setText(code);
+				slKey.setValue(inverse);
+			}
+		});
+		btnRecode.setBounds(12, 255, 112, 27);
+		getContentPane().add(btnRecode);
 	}
 	
 

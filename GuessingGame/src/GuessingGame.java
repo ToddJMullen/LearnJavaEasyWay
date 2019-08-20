@@ -1,21 +1,25 @@
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-
 import java.awt.Dimension;
 import java.awt.Font;
-import javax.swing.JTextField;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JRadioButton;
-import javax.swing.JToolBar;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 public class GuessingGame extends JFrame {
 	
+	/**
+	 * serialVersionUID not needed here, but added to remove warning
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private JTextField tiGuess;
 
 	private JLabel lblPrompt;

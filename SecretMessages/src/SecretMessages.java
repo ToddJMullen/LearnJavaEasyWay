@@ -9,7 +9,7 @@ public class SecretMessages {
 		String str;
 		String output;
 		int keyVal;
-		char key;
+//		char key;
 		
 		
 		System.out.println("Enter a message to encode or decode:");
@@ -24,7 +24,7 @@ public class SecretMessages {
 				);
 				break;
 			}
-			key = ' ';
+//			key = ' ';
 			keyVal = 0;
 			boolean valid = false;
 			
@@ -34,7 +34,7 @@ public class SecretMessages {
 					System.out.println("Enter a secret key (-25 & 25)");
 					keyVal = Integer.parseInt(cli.nextLine());
 					valid = keyVal >= -25 && keyVal <= 25;
-					key = (char) keyVal;
+//					key = (char) keyVal;
 					
 				} catch( Exception e ) {
 					System.out.println("Numbers Only!");
