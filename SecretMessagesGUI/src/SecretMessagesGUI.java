@@ -54,9 +54,11 @@ public class SecretMessagesGUI extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		
+		
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(12, 0, 569, 163);
 		getContentPane().add(scrollPane);
+		
 		
 		taIn = new JTextArea();
 		scrollPane.setViewportView(taIn);
@@ -90,8 +92,13 @@ public class SecretMessagesGUI extends JFrame {
 		tiKey.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				int key = Integer.parseInt(tiKey.getText());
-				slKey.setValue(key);
+				try {
+					int key = Integer.parseInt(tiKey.getText()) % 26;
+					slKey.setValue(key);
+				}
+				catch( Exception err ) {
+					JOptionPane.showMessageDialog(getContentPane(), "Your key must from -26 to 26");
+				}
 			}
 		});
 		tiKey.setText(DEFAULT_KEY);
@@ -102,12 +109,15 @@ public class SecretMessagesGUI extends JFrame {
 		getContentPane().add(tiKey);
 		tiKey.setColumns(10);
 		
+		
+		
 		JLabel lblKey = new JLabel("Key:");
 		lblKey.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblKey.setFont(new Font("Comfortaa", Font.PLAIN, 18));
 		lblKey.setForeground(Color.WHITE);
 		lblKey.setBounds(474, 183, 37, 27);
 		getContentPane().add(lblKey);
+		
 		
 		JButton btnEncodeDecode = new JButton("Encode / Decode");
 		btnEncodeDecode.setFont(new Font("Comfortaa", Font.PLAIN, 22));
