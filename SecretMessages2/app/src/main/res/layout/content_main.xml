@@ -12,8 +12,96 @@
         android:id="@+id/lblAppTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="Todd's Secret Messages App"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        tools:layout_editor_absoluteX="30dp"
-        tools:layout_editor_absoluteY="16dp" />
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="62dp" />
+
+    <EditText
+        android:id="@+id/taInput"
+        android:layout_width="395dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginRight="2dp"
+        android:width="100dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        android:lines="4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblAppTitle"
+        tools:text="Secret messages\nAre really\ncool aren't they?" />
+
+    <SeekBar
+        android:id="@+id/slKey"
+        android:layout_width="395dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:layout_marginTop="7dp"
+        android:max="26"
+        android:progress="14"
+        app:layout_constraintTop_toBottomOf="@+id/taInput"
+        tools:layout_editor_absoluteX="8dp" />
+
+    <TextView
+        android:id="@+id/lblKey"
+        android:layout_width="84dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:text="Key:"
+        android:textSize="26sp"
+        app:layout_constraintTop_toBottomOf="@+id/slKey"
+        tools:layout_editor_absoluteX="8dp" />
+
+    <EditText
+        android:id="@+id/tiKey"
+        android:layout_width="40dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:inputType="number"
+        android:text="1"
+        app:layout_constraintStart_toEndOf="@+id/lblKey"
+        app:layout_constraintTop_toBottomOf="@+id/slKey" />
+
+    <Button
+        android:id="@+id/btnEncode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginLeft="64dp"
+        android:layout_marginTop="15dp"
+        android:text="Encode/Decode"
+        android:textSize="20dp"
+        app:layout_constraintStart_toEndOf="@+id/tiKey"
+        app:layout_constraintTop_toBottomOf="@+id/slKey" />
+
+
+    <EditText
+        android:id="@+id/taOutput"
+        android:layout_width="395dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginRight="2dp"
+        android:width="100dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textLongMessage|textMultiLine|textNoSuggestions"
+        android:lines="4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnEncode"
+        tools:text="This is the output!" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
