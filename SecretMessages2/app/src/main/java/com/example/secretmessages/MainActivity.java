@@ -1,5 +1,6 @@
 package com.example.secretmessages;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -14,6 +15,10 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
+import android.widget.Toast;
+
+import java.text.DateFormat;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -68,8 +73,22 @@ public class MainActivity extends AppCompatActivity{
 		fab.setOnClickListener(new View.OnClickListener(){
 			@Override
 			public void onClick( View view ){
-				Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-						.setAction("Action", null).show();
+//				Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//						.setAction("Action", null).show();
+				Intent shareIntent = new Intent(Intent.ACTION_SEND);
+				shareIntent.setType("text/plain");
+				shareIntent.putExtra(Intent.EXTRA_SUBJECT,
+					"Secret Message, " + DateFormat.getDateTimeInstance().format(new Date()) );
+				shareIntent.putExtra(Intent.EXTRA_TEXT, taOutput.getText().toString() );
+				try {
+					startActivity( Intent.createChooser(shareIntent, "Share Message..."));
+					finish();
+				} catch ( android.content.ActivityNotFoundException e ){
+					Toast.makeText(MainActivity.this
+						,"Error: Could Not Share!"
+						,Toast.LENGTH_SHORT
+					).show();
+				}
 			}
 		});
 	}//onCreate/
