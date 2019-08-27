@@ -1,5 +1,6 @@
 package com.example.secretmessages;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -12,6 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
@@ -21,6 +23,8 @@ import java.text.DateFormat;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity{
+
+	InputMethodManager imm;
 
 	EditText tiKey;
 	EditText taInput;
@@ -35,6 +39,8 @@ public class MainActivity extends AppCompatActivity{
 		setContentView(R.layout.activity_main);
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
+
+		imm	= (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
 		tiKey		= (EditText)	findViewById(R.id.tiKey);
 		taInput		= (EditText)	findViewById(R.id.taInput);
@@ -56,6 +62,7 @@ public class MainActivity extends AppCompatActivity{
 				int key = Integer.parseInt(tiKey.getText().toString());
 //				taOutput.setText( tiKey.getText().toString() );// << for testing
 				encode( key );
+				imm.hideSoftInputFromWindow( view.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY );
 			}
 		});
 		btnRecode.setOnClickListener(new View.OnClickListener(){
