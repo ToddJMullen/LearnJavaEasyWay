@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity{
 	EditText taOutput;
 	SeekBar slKey;
 	Button btnEncode;
+	Button btnRecode;
 
 	@Override
 	protected void onCreate( Bundle savedInstanceState ){
@@ -40,6 +41,14 @@ public class MainActivity extends AppCompatActivity{
 		taOutput	= (EditText)	findViewById(R.id.taOutput);
 		slKey		= (SeekBar)		findViewById(R.id.slKey);
 		btnEncode	= (Button)		findViewById(R.id.btnEncode);
+		btnRecode	= (Button)		findViewById(R.id.btnRecode);
+
+		//handle incoming intent data
+		Intent receivedIntent	= getIntent();
+		String receivedText		= receivedIntent.getStringExtra(Intent.EXTRA_TEXT);
+		if( receivedText != null ){
+			taInput.setText( receivedText );
+		}
 
 		btnEncode.setOnClickListener(new View.OnClickListener(){
 			@Override
@@ -47,6 +56,17 @@ public class MainActivity extends AppCompatActivity{
 				int key = Integer.parseInt(tiKey.getText().toString());
 //				taOutput.setText( tiKey.getText().toString() );// << for testing
 				encode( key );
+			}
+		});
+		btnRecode.setOnClickListener(new View.OnClickListener(){
+			@Override
+			public void onClick( View view ){
+				String cipher = taOutput.getText().toString();
+				taInput.setText( cipher );
+				int enc = Integer.parseInt(tiKey.getText().toString());
+				int dec = (-1*enc)  + 13;
+				slKey.setProgress( dec );
+				tiKey.setText( "" + (-1*enc) );
 			}
 		});
 		slKey.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
