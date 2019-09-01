@@ -1,4 +1,5 @@
 import java.awt.event.*;
+import java.awt.Checkbox;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.JCheckBox;
 
 public class BubblePanel extends JPanel {
 
@@ -27,9 +29,12 @@ public class BubblePanel extends JPanel {
 	ArrayList<Bubble> bubbleList;
 	Timer timer;
 	JSlider slSpeed;
+	JCheckBox cbRandom;
+	
 	int delay	= 33;
 	int size	= 25;
 	boolean paused	= false;
+	boolean random	= true;
 	
 	
 	public BubblePanel( int width, int height) {
@@ -86,6 +91,16 @@ public class BubblePanel extends JPanel {
 			}
 		});
 		panel.add(btnClear);
+		
+		cbRandom = new JCheckBox("Random?");
+		cbRandom.setSelected(true);
+		cbRandom.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				random = cbRandom.isSelected();
+			}
+		});
+		panel.add(cbRandom);
+		
 		testBubbles();
 		addMouseListener( new BubbleListener() );//bind mouse click events to event delegate
 		addMouseMotionListener( new BubbleListener() );//bind mouse drag / move events
@@ -162,6 +177,7 @@ public class BubblePanel extends JPanel {
 	
 	private class Bubble{
 		private final int MAX_SPEED = 5;
+		private final int DEFAULT_SPEED = 5;
 		private int x;
 		private int y;
 		private int dx, dy;
@@ -175,14 +191,20 @@ public class BubblePanel extends JPanel {
 			y = newY;
 			dx = 0;
 			dy = 0;
-			do {
-				dx = rand.nextInt( MAX_SPEED * 2 + 1) - MAX_SPEED;				
+			if( random ) {
+				
+				do {
+					dx = rand.nextInt( MAX_SPEED * 2 + 1) - MAX_SPEED;				
+				} while ( dx == 0 );
+				
+				do {
+					dy = rand.nextInt( MAX_SPEED * 2 + 1) - MAX_SPEED;
+				} while( dy == 0 );
 			}
-			while ( dx == 0 );
-			do {
-				dy = rand.nextInt( MAX_SPEED * 2 + 1) - MAX_SPEED;
+			else {
+				dx = DEFAULT_SPEED;
+				dy = DEFAULT_SPEED;
 			}
-			while( dy == 0 );
 			size = newSize;
 			radius = size/2;
 			color = new Color(
