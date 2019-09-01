@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 public class BubblePanel extends JPanel {
 
@@ -17,18 +18,22 @@ public class BubblePanel extends JPanel {
 	
 	Random rand = new Random();
 	ArrayList<Bubble> bubbleList;
-	int size = 25;
+	Timer timer;
+	int delay	= 33;
+	int size	= 25;
 	
 	
 	public BubblePanel( int width, int height) {
 		WIDTH = width;
 		HEIGHT = height;
+		timer = new Timer(delay, new BubbleListener() );
 		bubbleList = new ArrayList<BubblePanel.Bubble>();
 		setBackground(Color.BLACK);
 		testBubbles();
 		addMouseListener( new BubbleListener() );//bind mouse click events to event delegate
 		addMouseMotionListener( new BubbleListener() );//bind mouse drag / move events
 		addMouseWheelListener( new BubbleListener() );//bind wheel movements
+		timer.start();
 	}//BubblePanel/
 	
 	
@@ -54,7 +59,9 @@ public class BubblePanel extends JPanel {
 	
 	
 	//create mouse event delegate class to encapsulate custom event driven behaviors
-	private class BubbleListener extends MouseAdapter{
+	private class BubbleListener
+		extends MouseAdapter
+		implements ActionListener{
 		
 		public void mousePressed( MouseEvent e) {
 			bubbleList.add( new Bubble(e.getX(), e.getY(), size) );
@@ -77,7 +84,17 @@ public class BubblePanel extends JPanel {
 			else if( size < MAX_BUBBLE_SIZE ) {
 				size = MAX_BUBBLE_SIZE;
 			}
-		}
+		}//mouseWheelMoved/
+		
+		
+		
+		public void actionPerformed( ActionEvent e) {
+			for( Bubble b : bubbleList ) {
+				b.update();
+			}
+			repaint();
+			
+		}//actionPerformed/
 		
 	}//BubbleListener
 	
@@ -111,6 +128,10 @@ public class BubblePanel extends JPanel {
 		public void draw( Graphics canvas ) {
 			canvas.setColor(color);
 			canvas.fillOval(x-size/2, y-size/2, size, size);
+		}
+		
+		public void update() {
+			y -= 5;
 		}
 		
 	}//Bubble
