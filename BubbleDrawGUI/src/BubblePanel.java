@@ -39,13 +39,14 @@ public class BubblePanel extends JPanel {
 	JSlider slSpeed;
 	JCheckBox cbRandom;
 	JLabel lblDyDx;
+	JCheckBox cbDrawPixels;
 	
 	int delay	= 33;
 	int size	= 25;
-	boolean paused	= false;
-	boolean random	= true;
+	boolean paused		= false;
+	boolean random		= true;
 	boolean bounceHard	= true;
-	
+	boolean drawPixels	= false;
 	
 	public BubblePanel( int width, int height) {
 		WIDTH		= width;
@@ -140,6 +141,17 @@ public class BubblePanel extends JPanel {
 			}
 		});
 		panel.add(btnToggleBounce);
+		
+		cbDrawPixels = new JCheckBox("Draw Pixels?");
+		cbDrawPixels.setSelected(drawPixels);
+		cbDrawPixels.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				drawPixels = cbDrawPixels.isSelected();
+			}
+		});
+		panel.add(cbDrawPixels);
 		
 		testBubbles();
 		addMouseListener( new BubbleListener() );//bind mouse click events to event delegate
@@ -237,8 +249,14 @@ public class BubblePanel extends JPanel {
 		
 		
 		public Bubble( int newX, int newY, int newSize ){
-			x = newX;
-			y = newY;
+			if( drawPixels ) {
+				x = (newX / newSize) * newSize + newSize/2;
+				y = (newY / newSize) * newSize + newSize/2;
+			}
+			else {
+				x = newX;
+				y = newY;
+			}
 			dx = 0;
 			dy = 0;
 			
@@ -273,8 +291,13 @@ public class BubblePanel extends JPanel {
 		
 		public void draw( Graphics canvas ) {
 			canvas.setColor(color);
-			canvas.fillOval(x-size/2, y-size/2, size, size);
-		}
+			if( drawPixels ) {
+				canvas.fillRect(x-size/2, y-size/2, size, size);
+			}
+			else {
+				canvas.fillOval(x-size/2, y-size/2, size, size);
+			}
+		}//draw/
 		
 		
 		public void update() {
@@ -314,7 +337,7 @@ public class BubblePanel extends JPanel {
 //			else if( x >= WIDTH ) {
 //				x = 0;
 //			}
-		}
+		}//update/
 		
 	}//Bubble
 
