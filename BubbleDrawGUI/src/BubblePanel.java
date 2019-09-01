@@ -134,7 +134,9 @@ public class BubblePanel extends JPanel {
 				if( bounceHard ) {
 					btnToggleBounce.setText( LABEL_HARD_BOUNCE );
 				}
-				else btnToggleBounce.setText( LABEL_SOFT_BOUNCE );
+				else {
+					btnToggleBounce.setText( LABEL_SOFT_BOUNCE );
+				}
 			}
 		});
 		panel.add(btnToggleBounce);
@@ -147,8 +149,16 @@ public class BubblePanel extends JPanel {
 	}//BubblePanel/
 	
 	private void updateDyDx(){
-		DEFAULT_SPEED = rand.nextInt( MAX_SPEED * 2 + 1) - MAX_SPEED;
-		SPEED_DIFF = rand.nextInt( DEFAULT_SPEED * 2 + 1);
+		int lastSpeed	= DEFAULT_SPEED;
+		int lastDiff	= SPEED_DIFF;
+		DEFAULT_SPEED	= 0;	
+		SPEED_DIFF		= 0;
+		do {
+			DEFAULT_SPEED = rand.nextInt( MAX_SPEED * 2 + 1) - MAX_SPEED;
+		} while ( DEFAULT_SPEED < 1 || DEFAULT_SPEED == lastSpeed );
+		do {
+			SPEED_DIFF = rand.nextInt( DEFAULT_SPEED * 2 + 1);
+		} while( SPEED_DIFF < 1 || SPEED_DIFF == lastDiff );
 		lblDyDx.setText( "dx: " + DEFAULT_SPEED + ", dy: " + SPEED_DIFF );
 	}
 	
