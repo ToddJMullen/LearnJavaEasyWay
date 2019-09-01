@@ -132,6 +132,9 @@ public class BubblePanel extends JPanel {
 		
 		public void update() {
 			y -= 5;
+			if( y <= 0 ) {
+				y = HEIGHT;
+			}
 		}
 		
 	}//Bubble
