@@ -7,6 +7,10 @@ import java.util.Random;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 public class BubblePanel extends JPanel {
 
@@ -22,6 +26,7 @@ public class BubblePanel extends JPanel {
 	Random rand = new Random();
 	ArrayList<Bubble> bubbleList;
 	Timer timer;
+	JSlider slSpeed;
 	int delay	= 33;
 	int size	= 25;
 	boolean paused	= false;
@@ -37,6 +42,24 @@ public class BubblePanel extends JPanel {
 		
 		JPanel panel = new JPanel();
 		add(panel);
+		
+		JLabel lblNewLabel = new JLabel("Speed");
+		panel.add(lblNewLabel);
+		
+		slSpeed = new JSlider();
+		slSpeed.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				int speed = slSpeed.getValue() + 1;
+				int delay = 1000 / speed;
+				timer.setDelay(delay);
+			}
+		});
+		slSpeed.setPaintLabels(true);
+		slSpeed.setPaintTicks(true);
+		slSpeed.setMinorTickSpacing(5);
+		slSpeed.setMajorTickSpacing(30);
+		slSpeed.setMaximum(120);
+		panel.add(slSpeed);
 		
 		JButton btnPause = new JButton("Pause");
 		btnPause.addActionListener(new ActionListener() {
@@ -143,6 +166,7 @@ public class BubblePanel extends JPanel {
 		private int y;
 		private int dx, dy;
 		private int size;
+		private int radius;
 		private Color color;
 		
 		
@@ -160,6 +184,7 @@ public class BubblePanel extends JPanel {
 			}
 			while( dy == 0 );
 			size = newSize;
+			radius = size/2;
 			color = new Color(
 				rand.nextInt(256)//red
 				,rand.nextInt(256)//green
@@ -180,12 +205,21 @@ public class BubblePanel extends JPanel {
 		public void update() {
 			x += dx;
 			y += dy;
+			//soft bounce (centers)
 			if( x <= 0 || x >= WIDTH ) {
 				dx *= -1;
 			}
 			if( y <= 0 || y >= HEIGHT ) {
 				dy *= -1;
 			}
+			//hard bounce (perimeters)
+			if( x - radius <= 0 || x + radius >= WIDTH ) {
+				dx *= -1;
+			}
+			if( y - radius <= 0 || y + radius >= HEIGHT ) {
+				dy *= -1;
+			}
+
 //			//loop bubbles vertically
 //			if( y <= 0 ) {
 //				y = HEIGHT;
