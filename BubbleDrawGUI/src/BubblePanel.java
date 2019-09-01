@@ -13,28 +13,38 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.JCheckBox;
+import javax.swing.JToggleButton;
 
 public class BubblePanel extends JPanel {
 
 	private final int MIN_BUBBLE_SIZE = 3;
 	private final int MAX_BUBBLE_SIZE = 300;
+	private final int MAX_SPEED = 5;
+
 	private final String LABEL_PAUSE = "Pause";
 	private final String LABEL_START = "Start";
+	private final String LABEL_SOFT_BOUNCE = "Soft Bounce";
+	private final String LABEL_HARD_BOUNCE = "Hard Bounce";
 	
 	private int WIDTH;
 	private int HEIGHT;
+	private int DEFAULT_SPEED = 5;
+	private int SPEED_DIFF	= 1;
 	
 	
 	Random rand = new Random();
 	ArrayList<Bubble> bubbleList;
 	Timer timer;
+	JToggleButton btnToggleBounce;
 	JSlider slSpeed;
 	JCheckBox cbRandom;
+	JLabel lblDyDx;
 	
 	int delay	= 33;
 	int size	= 25;
 	boolean paused	= false;
 	boolean random	= true;
+	boolean bounceHard	= true;
 	
 	
 	public BubblePanel( int width, int height) {
@@ -97,9 +107,37 @@ public class BubblePanel extends JPanel {
 		cbRandom.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				random = cbRandom.isSelected();
+				if( !random ) {
+					updateDyDx();
+				}
 			}
 		});
 		panel.add(cbRandom);
+		
+		JButton btnUpdateRandom = new JButton("Change dy/dx");
+		btnUpdateRandom.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				updateDyDx();
+			}
+		});
+		panel.add(btnUpdateRandom);
+		
+		lblDyDx = new JLabel("dy: 5, dx: 3");
+		panel.add(lblDyDx);
+		
+		btnToggleBounce = new JToggleButton( LABEL_HARD_BOUNCE );
+		btnToggleBounce.setSelected(bounceHard);
+		btnToggleBounce.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				bounceHard = btnToggleBounce.isSelected();
+				if( bounceHard ) {
+					btnToggleBounce.setText( LABEL_HARD_BOUNCE );
+				}
+				else btnToggleBounce.setText( LABEL_SOFT_BOUNCE );
+			}
+		});
+		panel.add(btnToggleBounce);
 		
 		testBubbles();
 		addMouseListener( new BubbleListener() );//bind mouse click events to event delegate
@@ -108,7 +146,11 @@ public class BubblePanel extends JPanel {
 		timer.start();
 	}//BubblePanel/
 	
-	
+	private void updateDyDx(){
+		DEFAULT_SPEED = rand.nextInt( MAX_SPEED * 2 + 1) - MAX_SPEED;
+		SPEED_DIFF = rand.nextInt( DEFAULT_SPEED * 2 + 1);
+		lblDyDx.setText( "dx: " + DEFAULT_SPEED + ", dy: " + SPEED_DIFF );
+	}
 	
 	public void paintComponent( Graphics canvas ) {
 		super.paintComponent(canvas);
@@ -176,8 +218,6 @@ public class BubblePanel extends JPanel {
 	
 	
 	private class Bubble{
-		private final int MAX_SPEED = 5;
-		private final int DEFAULT_SPEED = 5;
 		private int x;
 		private int y;
 		private int dx, dy;
@@ -191,8 +231,18 @@ public class BubblePanel extends JPanel {
 			y = newY;
 			dx = 0;
 			dy = 0;
+			
+			size = newSize;
+			radius = size/2;
+			color = new Color(
+				rand.nextInt(256)//red
+				,rand.nextInt(256)//green
+				,rand.nextInt(256)//blue
+				,rand.nextInt(256)//alpha
+			);
+			
+			
 			if( random ) {
-				
 				do {
 					dx = rand.nextInt( MAX_SPEED * 2 + 1) - MAX_SPEED;				
 				} while ( dx == 0 );
@@ -203,16 +253,9 @@ public class BubblePanel extends JPanel {
 			}
 			else {
 				dx = DEFAULT_SPEED;
-				dy = DEFAULT_SPEED;
+				dy = DEFAULT_SPEED + SPEED_DIFF;
 			}
-			size = newSize;
-			radius = size/2;
-			color = new Color(
-				rand.nextInt(256)//red
-				,rand.nextInt(256)//green
-				,rand.nextInt(256)//blue
-				,rand.nextInt(256)//alpha
-			);
+			
 					
 			
 		}//Bubble()
@@ -227,19 +270,24 @@ public class BubblePanel extends JPanel {
 		public void update() {
 			x += dx;
 			y += dy;
-			//soft bounce (centers)
-			if( x <= 0 || x >= WIDTH ) {
-				dx *= -1;
+			if( bounceHard ) {
+				
+				//hard bounce (perimeters)
+				if( x - radius <= 0 || x + radius >= WIDTH ) {
+					dx *= -1;
+				}
+				if( y - radius <= 0 || y + radius >= HEIGHT ) {
+					dy *= -1;
+				}
 			}
-			if( y <= 0 || y >= HEIGHT ) {
-				dy *= -1;
-			}
-			//hard bounce (perimeters)
-			if( x - radius <= 0 || x + radius >= WIDTH ) {
-				dx *= -1;
-			}
-			if( y - radius <= 0 || y + radius >= HEIGHT ) {
-				dy *= -1;
+			else {				
+				//soft bounce (centers)
+				if( x <= 0 || x >= WIDTH ) {
+					dx *= -1;
+				}
+				if( y <= 0 || y >= HEIGHT ) {
+					dy *= -1;
+				}
 			}
 
 //			//loop bubbles vertically

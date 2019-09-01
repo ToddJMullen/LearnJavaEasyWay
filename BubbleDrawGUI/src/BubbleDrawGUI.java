@@ -2,8 +2,8 @@ import javax.swing.JFrame;
 
 public class BubbleDrawGUI extends JFrame {
 	
-	public static final int WIDTH	= 900;
-	public static final int HEIGHT	= 800;
+	public static final int WIDTH	= 1100;
+	public static final int HEIGHT	= 1000;
 
 	public static void main(String[] args) {
 
