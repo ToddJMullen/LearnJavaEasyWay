@@ -81,7 +81,7 @@ public class BubblePanel extends JPanel {
 			if( size < MIN_BUBBLE_SIZE ) {
 				size = MIN_BUBBLE_SIZE;
 			}
-			else if( size < MAX_BUBBLE_SIZE ) {
+			else if( size > MAX_BUBBLE_SIZE ) {
 				size = MAX_BUBBLE_SIZE;
 			}
 		}//mouseWheelMoved/
@@ -104,8 +104,10 @@ public class BubblePanel extends JPanel {
 	
 	
 	private class Bubble{
+		private final int MAX_SPEED = 5;
 		private int x;
 		private int y;
+		private int dx, dy;
 		private int size;
 		private Color color;
 		
@@ -113,6 +115,8 @@ public class BubblePanel extends JPanel {
 		public Bubble( int newX, int newY, int newSize ){
 			x = newX;
 			y = newY;
+			dx = rand.nextInt( MAX_SPEED * 2 + 1) - MAX_SPEED;
+			dy = rand.nextInt( MAX_SPEED * 2 + 1) - MAX_SPEED;
 			size = newSize;
 			color = new Color(
 				rand.nextInt(256)//red
@@ -131,10 +135,12 @@ public class BubblePanel extends JPanel {
 		}
 		
 		public void update() {
-			y -= 5;
-			if( y <= 0 ) {
-				y = HEIGHT;
-			}
+			x += dx;
+			y += dy;
+			//loop bubbles vertically
+//			if( y <= 0 ) {
+//				y = HEIGHT;
+//			}
 		}
 		
 	}//Bubble
