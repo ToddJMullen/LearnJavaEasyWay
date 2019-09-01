@@ -176,13 +176,24 @@ public class BubblePanel extends JPanel {
 			canvas.fillOval(x-size/2, y-size/2, size, size);
 		}
 		
+		
 		public void update() {
 			x += dx;
 			y += dy;
 			//loop bubbles vertically
-//			if( y <= 0 ) {
-//				y = HEIGHT;
-//			}
+			if( y <= 0 ) {
+				y = HEIGHT;
+			}
+			else if( y >= HEIGHT ) {
+				y = 0;
+			}
+			//loop bubbles horizontally
+			if( x <= 0 ) {
+				x = WIDTH;
+			}
+			else if( x >= WIDTH ) {
+				x = 0;
+			}
 		}
 		
 	}//Bubble
