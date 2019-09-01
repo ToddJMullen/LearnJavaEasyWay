@@ -40,11 +40,13 @@ public class BubblePanel extends JPanel {
 	JCheckBox cbRandom;
 	JLabel lblDyDx;
 	JCheckBox cbDrawPixels;
+	JCheckBox cbBounceBubbles;
 	
 	int delay	= 33;
 	int size	= 25;
 	boolean paused		= false;
 	boolean random		= true;
+	boolean bounce		= true;
 	boolean bounceHard	= true;
 	boolean drawPixels	= false;
 	
@@ -145,7 +147,6 @@ public class BubblePanel extends JPanel {
 		cbDrawPixels = new JCheckBox("Draw Pixels?");
 		cbDrawPixels.setSelected(drawPixels);
 		cbDrawPixels.addChangeListener(new ChangeListener() {
-			
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				drawPixels = cbDrawPixels.isSelected();
@@ -153,12 +154,39 @@ public class BubblePanel extends JPanel {
 		});
 		panel.add(cbDrawPixels);
 		
+		cbBounceBubbles = new JCheckBox("Bounce?");
+		cbBounceBubbles.setSelected(bounce);
+		cbBounceBubbles.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				bounce =  cbBounceBubbles.isSelected();
+				//can't change bounce type if not bounce mode 
+				btnToggleBounce.setEnabled( bounce );
+			}
+		});
+		panel.add(cbBounceBubbles);
+		
+		
 		testBubbles();
 		addMouseListener( new BubbleListener() );//bind mouse click events to event delegate
 		addMouseMotionListener( new BubbleListener() );//bind mouse drag / move events
 		addMouseWheelListener( new BubbleListener() );//bind wheel movements
 		timer.start();
 	}//BubblePanel/
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	private void updateDyDx(){
 		int lastSpeed	= DEFAULT_SPEED;
@@ -303,40 +331,44 @@ public class BubblePanel extends JPanel {
 		public void update() {
 			x += dx;
 			y += dy;
-			if( bounceHard ) {
-				
-				//hard bounce (perimeters)
-				if( x - radius <= 0 || x + radius >= WIDTH ) {
-					dx *= -1;
+			if( bounce ) {
+				if( bounceHard ) {
+					
+					//hard bounce (perimeters)
+					if( x - radius <= 0 || x + radius >= WIDTH ) {
+						dx *= -1;
+					}
+					if( y - radius <= 0 || y + radius >= HEIGHT ) {
+						dy *= -1;
+					}
 				}
-				if( y - radius <= 0 || y + radius >= HEIGHT ) {
-					dy *= -1;
+				else {				
+					//soft bounce (centers)
+					if( x <= 0 || x >= WIDTH ) {
+						dx *= -1;
+					}
+					if( y <= 0 || y >= HEIGHT ) {
+						dy *= -1;
+					}
 				}
 			}
-			else {				
-				//soft bounce (centers)
-				if( x <= 0 || x >= WIDTH ) {
-					dx *= -1;
+			else {
+							
+				//loop bubbles vertically
+				if( y <= 0 ) {
+					y = HEIGHT;
 				}
-				if( y <= 0 || y >= HEIGHT ) {
-					dy *= -1;
+				else if( y >= HEIGHT ) {
+					y = 0;
+				}
+				//loop bubbles horizontally
+				if( x <= 0 ) {
+					x = WIDTH;
+				}
+				else if( x >= WIDTH ) {
+					x = 0;
 				}
 			}
-
-//			//loop bubbles vertically
-//			if( y <= 0 ) {
-//				y = HEIGHT;
-//			}
-//			else if( y >= HEIGHT ) {
-//				y = 0;
-//			}
-//			//loop bubbles horizontally
-//			if( x <= 0 ) {
-//				x = WIDTH;
-//			}
-//			else if( x >= WIDTH ) {
-//				x = 0;
-//			}
 		}//update/
 		
 	}//Bubble
