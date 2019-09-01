@@ -98,9 +98,10 @@ public class BubblePanel extends JPanel {
 			y = newY;
 			size = newSize;
 			color = new Color(
-				rand.nextInt(256)
-				,rand.nextInt(256)
-				,rand.nextInt(256)
+				rand.nextInt(256)//red
+				,rand.nextInt(256)//green
+				,rand.nextInt(256)//blue
+				,rand.nextInt(256)//alpha
 			);
 					
 			
