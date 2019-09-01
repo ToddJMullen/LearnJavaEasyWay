@@ -7,9 +7,13 @@ import java.util.Random;
 import javax.swing.JPanel;
 
 public class BubblePanel extends JPanel {
+
+	private static final int MIN_BUBBLE_SIZE = 3;
+	private static final int MAX_BUBBLE_SIZE = 300;
 	
 	private int WIDTH;
 	private int HEIGHT;
+	
 	
 	Random rand = new Random();
 	ArrayList<Bubble> bubbleList;
@@ -21,7 +25,7 @@ public class BubblePanel extends JPanel {
 		HEIGHT = height;
 		bubbleList = new ArrayList<BubblePanel.Bubble>();
 		setBackground(Color.BLACK);
-//		testBubbles();
+		testBubbles();
 		addMouseListener( new BubbleListener() );//bind mouse click events to event delegate
 		addMouseMotionListener( new BubbleListener() );//bind mouse drag / move events
 		addMouseWheelListener( new BubbleListener() );//bind wheel movements
@@ -41,7 +45,7 @@ public class BubblePanel extends JPanel {
 		for( int n = 0; n < 300; n++ ) {
 			int x = rand.nextInt( WIDTH );
 			int y = rand.nextInt( HEIGHT );
-			int size = rand.nextInt(50);
+			int size = rand.nextInt( MAX_BUBBLE_SIZE );
 			bubbleList.add( new Bubble( x, y, size) );
 		}
 		repaint();
@@ -67,6 +71,12 @@ public class BubblePanel extends JPanel {
 			int dir = System.getProperty("os.name").startsWith("Mac") ? -1 : 1;//normalize mac
 			
 			size += dir * e.getUnitsToScroll();
+			if( size < MIN_BUBBLE_SIZE ) {
+				size = MIN_BUBBLE_SIZE;
+			}
+			else if( size < MAX_BUBBLE_SIZE ) {
+				size = MAX_BUBBLE_SIZE;
+			}
 		}
 		
 	}//BubbleListener
