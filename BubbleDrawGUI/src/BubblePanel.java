@@ -6,11 +6,14 @@ import java.util.Random;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import javax.swing.JButton;
 
 public class BubblePanel extends JPanel {
 
-	private static final int MIN_BUBBLE_SIZE = 3;
-	private static final int MAX_BUBBLE_SIZE = 300;
+	private final int MIN_BUBBLE_SIZE = 3;
+	private final int MAX_BUBBLE_SIZE = 300;
+	private final String LABEL_PAUSE = "Pause";
+	private final String LABEL_START = "Start";
 	
 	private int WIDTH;
 	private int HEIGHT;
@@ -21,14 +24,45 @@ public class BubblePanel extends JPanel {
 	Timer timer;
 	int delay	= 33;
 	int size	= 25;
+	boolean paused	= false;
 	
 	
 	public BubblePanel( int width, int height) {
-		WIDTH = width;
-		HEIGHT = height;
-		timer = new Timer(delay, new BubbleListener() );
-		bubbleList = new ArrayList<BubblePanel.Bubble>();
-		setBackground(Color.BLACK);
+		WIDTH		= width;
+		HEIGHT		= height;
+		timer		= new Timer(delay, new BubbleListener() );
+		bubbleList	= new ArrayList<BubblePanel.Bubble>();
+		
+		setBackground(Color.DARK_GRAY);
+		
+		JPanel panel = new JPanel();
+		add(panel);
+		
+		JButton btnPause = new JButton("Pause");
+		btnPause.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JButton btn = (JButton) e.getSource();
+				paused = !paused;
+				if( paused ) {
+					timer.stop();
+					btn.setText(LABEL_START);
+				}
+				else {
+					timer.start();
+					btn.setText(LABEL_PAUSE);
+				}
+			}
+		});
+		panel.add(btnPause);
+		
+		JButton btnClear = new JButton("Clear");
+		btnClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				bubbleList = new ArrayList<BubblePanel.Bubble>();
+				repaint();
+			}
+		});
+		panel.add(btnClear);
 		testBubbles();
 		addMouseListener( new BubbleListener() );//bind mouse click events to event delegate
 		addMouseMotionListener( new BubbleListener() );//bind mouse drag / move events
