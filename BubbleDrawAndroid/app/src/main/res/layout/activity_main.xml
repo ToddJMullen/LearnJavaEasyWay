@@ -10,7 +10,17 @@
 
     <com.example.bubbledraw.BubbleView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent">
+
+    </com.example.bubbledraw.BubbleView>
+
+    <!--button is visible inside & outside BubbleView,-->
+    <!--neither position works if touch or click listener is bound-->
+    <!--I think it may be related to how BubbleView is setup to handle the events-->
+    <!--<Button-->
+        <!--android:id="@+id/btnClear"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Clear" />-->
 
 </RelativeLayout>

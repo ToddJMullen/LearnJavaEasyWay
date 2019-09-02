@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 //import android.widget.ImageView;//replace because AS warned to use the AppCompatImageView which adds 'magic' enhancements
 import android.view.View;
 import android.os.Handler;//had to add manually, was only suggesting java.util.logging.Handler
+import android.widget.Button;
 
 import androidx.appcompat.widget.AppCompatImageView;
 
@@ -49,6 +50,7 @@ public class BubbleView
 	private int delay	= 33;
 	private ArrayList<Bubble> bubbleList;
 
+//	private Button	btnClear;
 
 	private Paint myPaint	= new Paint();
 	private Handler h		= new Handler();
@@ -61,18 +63,34 @@ public class BubbleView
 		WIDTH = 1000;//getWidth();
 		HEIGHT = 1500;//getHeight();
 		bubbleList = new ArrayList<Bubble>();
-//		blowBubbles();
+		blowBubbles();
 		setOnTouchListener( this );
+//		btnClear = (Button) findViewById(R.id.btnClear);
+		//app will not start/run is either of these listeners is bound
+//		btnClear/.setOnTouchListener(new OnTouchListener(){
+//			@Override
+//			public boolean onTouch( View view, MotionEvent motionEvent ){
+//
+//				return false;
+//			}
+//		});
+//		btnClear.setOnClickListener(new OnClickListener(){
+//			@Override
+//			public void onClick( View view ){
+//				bubbleList = new ArrayList<Bubble>();
+//				invalidate();
+//			}
+//		});
 	}//BubbleView
 
 
 	private Runnable r = new Runnable(){
 		@Override
 		public void run(){
-			for( Bubble b: bubbleList ){
-				b.update();
-			}
-			invalidate();
+		for( Bubble b: bubbleList ){
+			b.update();
+		}
+		invalidate();
 		}
 	};
 
@@ -98,20 +116,22 @@ public class BubbleView
 		invalidate();
 	}//blowBubbles/
 
+
 	@Override
 	public boolean onTouch( View view, MotionEvent motionEvent ){
 		int pointers = motionEvent.getPointerCount();
 		for( int n = 0; n < pointers; n++ ){
 			int x = (int) motionEvent.getX(n);
 			int y = (int) motionEvent.getY(n);
-			int s = rand.nextInt( size ) + size + n;
+			int s = rand.nextInt( size ) + size;
 			bubbleList.add( new Bubble(x, y, s) );
 		}
-		return true;
+		return true;//return false makes no change when trying to bind listeners to btnClear
 	}
 
 
-	
+
+
 
 	///////////////////////////////////////////////////
 	///////////////////////////////////////////////////
