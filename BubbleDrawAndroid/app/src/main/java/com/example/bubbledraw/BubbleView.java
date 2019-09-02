@@ -61,8 +61,10 @@ public class BubbleView
 		WIDTH = 1000;//getWidth();
 		HEIGHT = 1500;//getHeight();
 		bubbleList = new ArrayList<Bubble>();
-		blowBubbles();
+//		blowBubbles();
+		setOnTouchListener( this );
 	}//BubbleView
+
 
 	private Runnable r = new Runnable(){
 		@Override
@@ -98,8 +100,23 @@ public class BubbleView
 
 	@Override
 	public boolean onTouch( View view, MotionEvent motionEvent ){
-		return false;
+		int pointers = motionEvent.getPointerCount();
+		for( int n = 0; n < pointers; n++ ){
+			int x = (int) motionEvent.getX(n);
+			int y = (int) motionEvent.getY(n);
+			int s = rand.nextInt( size ) + size + n;
+			bubbleList.add( new Bubble(x, y, s) );
+		}
+		return true;
 	}
+
+
+	
+
+	///////////////////////////////////////////////////
+	///////////////////////////////////////////////////
+	//// Bubble Class Definition
+	///////////////////////////////////////////////////
 
 
 	private class Bubble{
