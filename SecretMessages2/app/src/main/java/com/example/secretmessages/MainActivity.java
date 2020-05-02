@@ -10,14 +10,17 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -29,9 +32,15 @@ public class MainActivity extends AppCompatActivity{
 	EditText tiKey;
 	EditText taInput;
 	EditText taOutput;
+
+	CheckBox cbRollKey;
+	CheckBox cbReverse;
+//	ToggleButton cbReverse;
+
 	SeekBar slKey;
 	Button btnEncode;
 	Button btnRecode;
+	Button btnDecode;
 
 	@Override
 	protected void onCreate( Bundle savedInstanceState ){
@@ -45,8 +54,12 @@ public class MainActivity extends AppCompatActivity{
 		tiKey		= (EditText)	findViewById(R.id.tiKey);
 		taInput		= (EditText)	findViewById(R.id.taInput);
 		taOutput	= (EditText)	findViewById(R.id.taOutput);
+		cbRollKey	= (CheckBox) 	findViewById(R.id.cbRollKey);
+		cbReverse	= (CheckBox) 	findViewById(R.id.cbReverse);
+//		cbReverse	= (ToggleButton) 	findViewById(R.id.cbReverse);
 		slKey		= (SeekBar)		findViewById(R.id.slKey);
 		btnEncode	= (Button)		findViewById(R.id.btnEncode);
+		btnDecode	= (Button)		findViewById(R.id.btnDecode);
 		btnRecode	= (Button)		findViewById(R.id.btnRecode);
 
 		//handle incoming intent data
@@ -65,6 +78,16 @@ public class MainActivity extends AppCompatActivity{
 				imm.hideSoftInputFromWindow( view.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY );
 			}
 		});
+
+		btnDecode.setOnClickListener( new View.OnClickListener(){
+			@Override
+			public void onClick( View view ){
+				int key = Integer.parseInt(tiKey.getText().toString());
+				decode( key );
+				imm.hideSoftInputFromWindow( view.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY );
+			}
+		});
+
 		btnRecode.setOnClickListener(new View.OnClickListener(){
 			@Override
 			public void onClick( View view ){
@@ -130,12 +153,36 @@ public class MainActivity extends AppCompatActivity{
 //			return;
 //		}
 
-		String ciphertext = caesar(plaintext, key);
+		boolean rollKey = cbRollKey.isChecked();
 
-		ciphertext = stringReverse(ciphertext);
+		String ciphertext = caesar(plaintext, key, rollKey );
+
+		if( cbReverse.isChecked() ){
+			ciphertext = stringReverse(ciphertext);
+		}
 
 		taOutput.setText(ciphertext);
 	}//encode/
+
+
+	private void decode( int key ){
+
+		String plaintext = taInput.getText().toString();
+
+		boolean rollKey = cbRollKey.isChecked();
+
+		if( cbReverse.isChecked() ){
+			plaintext = stringReverse(plaintext);
+		}
+
+		String ciphertext = caesar(plaintext, key, rollKey );
+
+
+		taOutput.setText(ciphertext);
+
+	}//decode
+
+
 
 	private static String stringReverse( String str ) {
 		String rts = "";
@@ -146,13 +193,30 @@ public class MainActivity extends AppCompatActivity{
 	}//stringReverse/
 
 
+//This is a test of a long sentences with many more characters than expected.
 
-
-	private static String caesar( String str, int keyVal ) {
+	private static String caesar( String str, int keyVal, boolean rollKey ) {
 		char key = (char) keyVal;
 		String csr = "";
 		for( int i = 0; i < str.length(); i++ ) {
+
+			if( rollKey ){
+				int j = i%26;
+				Log.d("Key Increment", Integer.toString(j) );
+
+				if( keyVal > 0 ){
+					key += j;//keep incrementing the key
+				}
+				if( keyVal < 0 ){
+					key -= j;//keep decrementing the key
+				}
+			}
+//			Log.d("Key", Character.toString(key) );
+
 			char input = str.charAt(i);
+			Log.d("Current Char:", Character.toString(input) );
+
+
 			if( input >= 'A' && input <= 'Z' ) {
 				input += key;
 
@@ -162,9 +226,11 @@ public class MainActivity extends AppCompatActivity{
 				if( input < 'A' ) {
 					input += 26;
 				}
+				Log.d("A-Z Range", Character.toString(input) );
 
 			}
 			else if( input >= 'a' && input <= 'z' ) {
+
 				input += key;
 
 				if( input > 'z' ) {
@@ -173,16 +239,22 @@ public class MainActivity extends AppCompatActivity{
 				if( input < 'a' ) {
 					input += 26;
 				}
+				Log.d("a-z Range", Character.toString(input) );
 			}
 			else if( input >= '0' && input <= '9' ) {
 				input += (keyVal % 10);
+
 				if( input > '9' ) {
 					input -= 10;
 				}
 				else if( input < '0' ) {
 					input += 10;
 				}
+				Log.d("0-9 Range", Character.toString(input) );
 			}
+
+			Log.d("Final char", Character.toString(input) );
+
 			csr += input;
 		}
 
