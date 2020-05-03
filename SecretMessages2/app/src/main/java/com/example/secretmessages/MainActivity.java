@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity{
 //	static final String testStr = "abc123";
 //	static final String testStr = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 	static final String testStr = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-	static final Boolean MODE_TEST = true;
+	static final Boolean MODE_TEST = false;
 
 	EditText tiKey;
 	EditText taInput;
