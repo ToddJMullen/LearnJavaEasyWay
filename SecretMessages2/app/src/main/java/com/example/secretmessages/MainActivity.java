@@ -29,6 +29,12 @@ public class MainActivity extends AppCompatActivity{
 
 	InputMethodManager imm;
 
+//	static final String testStr = " ~` [] {} |/ This is a test of 123 chars to 098 and !@#$%^&*()_+=-?,.<> {} |/ {} [] `~ ";
+//	static final String testStr = "abc123";
+//	static final String testStr = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+	static final String testStr = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+	static final Boolean MODE_TEST = true;
+
 	EditText tiKey;
 	EditText taInput;
 	EditText taOutput;
@@ -40,7 +46,9 @@ public class MainActivity extends AppCompatActivity{
 	SeekBar slKey;
 	Button btnEncode;
 	Button btnRecode;
-	Button btnDecode;
+//	Button btnDecode;
+	Button btnReset;
+
 
 	@Override
 	protected void onCreate( Bundle savedInstanceState ){
@@ -59,8 +67,9 @@ public class MainActivity extends AppCompatActivity{
 //		cbReverse	= (ToggleButton) 	findViewById(R.id.cbReverse);
 		slKey		= (SeekBar)		findViewById(R.id.slKey);
 		btnEncode	= (Button)		findViewById(R.id.btnEncode);
-		btnDecode	= (Button)		findViewById(R.id.btnDecode);
+//		btnDecode	= (Button)		findViewById(R.id.btnDecode);
 		btnRecode	= (Button)		findViewById(R.id.btnRecode);
+		btnReset	= (Button)		findViewById(R.id.btnReset);
 
 		//handle incoming intent data
 		Intent receivedIntent	= getIntent();
@@ -79,14 +88,14 @@ public class MainActivity extends AppCompatActivity{
 			}
 		});
 
-		btnDecode.setOnClickListener( new View.OnClickListener(){
-			@Override
-			public void onClick( View view ){
-				int key = Integer.parseInt(tiKey.getText().toString());
-				decode( key );
-				imm.hideSoftInputFromWindow( view.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY );
-			}
-		});
+//		btnDecode.setOnClickListener( new View.OnClickListener(){
+//			@Override
+//			public void onClick( View view ){
+//				int key = Integer.parseInt(tiKey.getText().toString());
+//				decode( key );
+//				imm.hideSoftInputFromWindow( view.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY );
+//			}
+//		});
 
 		btnRecode.setOnClickListener(new View.OnClickListener(){
 			@Override
@@ -94,9 +103,19 @@ public class MainActivity extends AppCompatActivity{
 				String cipher = taOutput.getText().toString();
 				taInput.setText( cipher );
 				int enc = Integer.parseInt(tiKey.getText().toString());
-				int dec = (-1*enc)  + 13;
+				int dec = (-1*enc) + 13;
 				slKey.setProgress( dec );
 				tiKey.setText( "" + (-1*enc) );
+				imm.hideSoftInputFromWindow( view.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY );
+			}
+		});
+
+		btnReset.setOnClickListener( new View.OnClickListener(){
+			@Override
+			public void onClick( View view ){
+				String str = MODE_TEST ? testStr : "";
+				taInput.setText(str);
+				taOutput.setText("");
 			}
 		});
 
@@ -142,6 +161,10 @@ public class MainActivity extends AppCompatActivity{
 				}
 			}
 		});
+
+		if( MODE_TEST ){
+			taInput.setText( testStr );
+		}
 	}//onCreate/
 
 
@@ -156,10 +179,15 @@ public class MainActivity extends AppCompatActivity{
 
 		boolean rollKey = cbRollKey.isChecked();
 
+
+		if( key >= 0 && cbReverse.isChecked() ){
+			plaintext = stringReverse(plaintext);
+		}
+
 //		String ciphertext = caesar(plaintext, key, rollKey );
 		String ciphertext = vigenere(plaintext, key, rollKey );
 
-		if( cbReverse.isChecked() ){
+		if( key < 0 && cbReverse.isChecked() ){
 			ciphertext = stringReverse(ciphertext);
 		}
 
@@ -192,7 +220,7 @@ public class MainActivity extends AppCompatActivity{
 		String csr = "";
 		Log.d("vigenere/ Start:", str );
 
-		//This is a test of 123 chars to 098 and !@#$%^&*()_+=-
+
 
 		for( int i = 0; i < str.length(); i++ ){
 			StringBuilder sb = new StringBuilder();
@@ -248,6 +276,16 @@ public class MainActivity extends AppCompatActivity{
 		}// for each char
 
 		Log.d("vigenere/ End:", csr );
+		if( MODE_TEST && baseKey < 0 ){
+			if( csr.equals(testStr) ){
+				Log.w("vigenere/","Matched Test String!");
+			} else {
+				Log.w("vigenere/", "Test String is Different!");
+				Log.w("Expect", testStr);
+				Log.w("Result", csr);
+
+			}
+		}
 		return csr;
 
 	}// vigenere
