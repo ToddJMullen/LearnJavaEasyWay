@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity{
 				tiKey.setText( "" + (-1*enc) );
 			}
 		});
+
 		slKey.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
 			@Override
 			public void onProgressChanged( SeekBar seekBar, int i, boolean b ){
@@ -155,7 +156,8 @@ public class MainActivity extends AppCompatActivity{
 
 		boolean rollKey = cbRollKey.isChecked();
 
-		String ciphertext = caesar(plaintext, key, rollKey );
+//		String ciphertext = caesar(plaintext, key, rollKey );
+		String ciphertext = vigenere(plaintext, key, rollKey );
 
 		if( cbReverse.isChecked() ){
 			ciphertext = stringReverse(ciphertext);
@@ -175,7 +177,8 @@ public class MainActivity extends AppCompatActivity{
 			plaintext = stringReverse(plaintext);
 		}
 
-		String ciphertext = caesar(plaintext, key, rollKey );
+//		String ciphertext = caesar(plaintext, key, rollKey );
+		String ciphertext = vigenere(plaintext, key, rollKey );
 
 
 		taOutput.setText(ciphertext);
@@ -183,38 +186,268 @@ public class MainActivity extends AppCompatActivity{
 	}//decode
 
 
-
-	private static String stringReverse( String str ) {
-		String rts = "";
-		for( int l = str.length()-1; l >= 0; l-- ) {
-			rts += str.charAt(l);
-		}
-		return rts;
-	}//stringReverse/
-
-
-//This is a test of a long sentences with many more characters than expected.
-
-	private static String caesar( String str, int keyVal, boolean rollKey ) {
-		char key = (char) keyVal;
+	private static String vigenere( String str, int baseKey, boolean rollKey ) {
+		int MAX = 127;// 126 is ~ (127 DEL)
+		int MIN = 32;// 32 is space (31 unit separator)
 		String csr = "";
-		for( int i = 0; i < str.length(); i++ ) {
+		Log.d("vigenere/ Start:", str );
+
+		//This is a test of 123 chars to 098 and !@#$%^&*()_+=-
+
+		for( int i = 0; i < str.length(); i++ ){
+			StringBuilder sb = new StringBuilder();
+			int key = baseKey;
+			int input = str.charAt(i);
+
+			sb.append("Char: " +  input + " '" + (char) input + "'" );
 
 			if( rollKey ){
-				int j = i%26;
-				Log.d("Key Increment", Integer.toString(j) );
-
-				if( keyVal > 0 ){
-					key += j;//keep incrementing the key
-				}
-				if( keyVal < 0 ){
-					key -= j;//keep decrementing the key
+				if( baseKey >= 0 ){
+					key += i;
+				} else {
+					key -= i;
 				}
 			}
+
+			if( baseKey >= 0 ){
+				input += key;
+				sb.append(" + key" + key + " => " +  input );//+ " '" + (char) input + "'" );
+				input %= MAX;
+				sb.append(" %" + MAX + " => "  +  input );//+ " '" + (char) input + "'" );
+				if( input <= MIN ){
+					input += MIN;
+					sb.append(" +" + MIN + " => "  +  input );//+ " '" + (char) input + "'" );
+				}
+
+			} else {
+
+				input += key;
+				sb.append(" + key" + key + " => " +  input );//+ " '" + (char) input + "'" );
+
+				if( input < MIN ){
+					input -= MIN;
+					sb.append(" -" + MIN + " => "  +  input );//+ " '" + (char) input + "'" );
+					// then it was over to begin with
+					input += MAX;
+					sb.append(" +" + MAX + " => " +  input );//+ " '" + (char) input + "'" );
+				}
+
+
+				input %= MAX;
+				sb.append(" %" + MAX + " => "  +  input );//+ " '" + (char) input + "'" );
+
+			}
+
+
+			sb.append(" => out: " + input + " (" + (char) + input + ")" );
+
+			Log.d("", sb.toString() );
+
+			csr += (char) input;
+
+		}// for each char
+
+		Log.d("vigenere/ End:", csr );
+		return csr;
+
+	}// vigenere
+
+
+
+
+	private static String Xvigenere( String str, int baseKey, boolean rollKey ) {
+//		char key = (char) baseKey;
+		int MAX = 126;// 126 is ~
+		int MIN = 31;// 32 is space
+		int shift = baseKey >= 0 ? MIN : MIN;
+		String csr = "";
+
+
+		for( int i = 0; i < str.length(); i++ ) {
+
+			StringBuilder sb = new StringBuilder();
+			int input = str.charAt(i);
+			int key = baseKey;
+
+//			sb.append("Idx ");
+//			sb.append( i );
+
+			sb.append("Char: " +  input + " '" + (char) input + "'" );
+
+
+			if( rollKey ){
+				int j = i;//%26;
+
+				if( baseKey > 0 || baseKey == 0 ){
+					key += j;//keep incrementing the key
+				}
+				if( baseKey < 0 ){
+					key -= j;//keep decrementing the key
+				}
+//				key = (char) baseKey;
+//				key = baseKey;
+			}
+
+//			key += MAX;
+
+
+
+			// Mod & shift have to be done in opposite order depending on key, else transformations
+			// are not symmetric at the boundaries (32 & 127)
+
+			if( baseKey > 0 || baseKey == 0 ){
+
+				input += key;//shift the character
+				sb.append(" + k" + key );
+
+				input += MAX;
+				sb.append(" + shift" + MAX );
+
+				sb.append(" => " + input + " '" + (char) input + "'" );
+
+
+				input %= MAX;//wrap it back to print chars
+
+				sb.append(" %" + MAX + " => " + input + " (" + (char) input + ")" );
+
+				if( input < MIN ){
+					sb.append(" (< 32 shift +" + MIN + ") ");
+					input += MIN;//shift up 32, 0-31 are non-printable
+				}
+
+
+			}
+			else if( baseKey < 0 ){
+
+				sb.append(" " + input + " +" + key );
+				input += key;//shift the character
+				sb.append(" => " + input + " '" + (char) input + "'" );
+
+				int M = MIN;
+
+				if( input % MIN < M ){
+					sb.append(" (input was < " + M + " )");
+					input -= M;
+					input += MAX;
+					sb.append(" so shifted down " + M + " and back up +" + MAX + " => " + input + " (" + (char) input + ")" );
+
+//					input %= MAX;
+//					sb.append(" moded: => " + input + " (" + (char) input + ")" );
+				}
+
+//				input %= MAX;//wrap it back to print chars
+
+				sb.append(" %" + MAX + " => " + input + " (" + (char) input + " wrapped)" );
+
+				input += key;//shift the character
+
+				sb.append(" => " + input + " '" + (char) input + "'" );
+
+			}
+
+
+			sb.append(" => " );
+			sb.append( input );
+			sb.append( " (" + (char) input + ")" );
+
+			Log.d("Final ", sb.toString() );
+
+			csr += (char) input;
+
+//			Log.d("Key", Character.toString(key) );
+
+
+//			Log.d("Current Char:", Character.toString(input) );
+
+
+//			if( input >= 'A' && input <= 'Z' ) {
+//				input += key;
+//
+//				if( input > 'Z' ) {
+//					input -= 26;//shift it back into the uppercase range
+//				}
+//				if( input < 'A' ) {
+//					input += 26;
+//				}
+////				Log.d("A-Z Range", Character.toString(input) );
+//
+//			}
+//			else if( input >= 'a' && input <= 'z' ) {
+//
+//				input += key;
+//
+//				if( input > 'z' ) {
+//					input -= 26;//shift it back into the lowercase range
+//				}
+//				if( input < 'a' ) {
+//					input += 26;
+//				}
+////				Log.d("a-z Range", Character.toString(input) );
+//			}
+//			else if( input >= '0' && input <= '9' ) {
+//				input += (baseKey % 10);
+//
+//				if( input > '9' ) {
+//					input -= 10;
+//				}
+//				else if( input < '0' ) {
+//					input += 10;
+//				}
+////				Log.d("0-9 Range", Character.toString(input) );
+//			}
+//			input += key;
+//			sb.append(" => " );
+//			sb.append( input );
+//
+//			Log.d("Final ", sb.toString() );
+//
+//			csr += (char) input;
+		}//for each char
+
+		return csr;
+	}//vigenere/
+
+
+// This is a test of a long sentences with many more characters than expected & punctuation
+// 1234567890 )(*&^%$#@!~`\][|}{';":/.,?><.
+
+	private static String caesar( String str, int baseKey, boolean rollKey ) {
+		char key = (char) baseKey;
+		String csr = "";
+
+		for( int i = 0; i < str.length(); i++ ) {
+
+			StringBuilder sb = new StringBuilder();
+			sb.append("Idx ");
+			sb.append( i );
+
+//			if( rollKey ){
+//				int j = i;//%26;
+//				sb.append(", Add ");
+//				sb.append( j );
+////				Log.d("Key Increment", Integer.toString(j) );
+//				// Recast key to match types
+//
+//
+//				if( baseKey > 0 ){
+//					baseKey += j;//keep incrementing the key
+//				}
+//				if( baseKey < 0 ){
+//					baseKey -= j;//keep decrementing the key
+//				}
+//				key = (char) baseKey;
+//			}
+
+			sb.append(", Key: ");
+			sb.append( key );
+
 //			Log.d("Key", Character.toString(key) );
 
 			char input = str.charAt(i);
-			Log.d("Current Char:", Character.toString(input) );
+			sb.append(", Char:");
+			sb.append( input );
+
+//			Log.d("Current Char:", Character.toString(input) );
 
 
 			if( input >= 'A' && input <= 'Z' ) {
@@ -226,7 +459,7 @@ public class MainActivity extends AppCompatActivity{
 				if( input < 'A' ) {
 					input += 26;
 				}
-				Log.d("A-Z Range", Character.toString(input) );
+//				Log.d("A-Z Range", Character.toString(input) );
 
 			}
 			else if( input >= 'a' && input <= 'z' ) {
@@ -239,10 +472,10 @@ public class MainActivity extends AppCompatActivity{
 				if( input < 'a' ) {
 					input += 26;
 				}
-				Log.d("a-z Range", Character.toString(input) );
+//				Log.d("a-z Range", Character.toString(input) );
 			}
 			else if( input >= '0' && input <= '9' ) {
-				input += (keyVal % 10);
+				input += (baseKey % 10);
 
 				if( input > '9' ) {
 					input -= 10;
@@ -250,10 +483,12 @@ public class MainActivity extends AppCompatActivity{
 				else if( input < '0' ) {
 					input += 10;
 				}
-				Log.d("0-9 Range", Character.toString(input) );
+//				Log.d("0-9 Range", Character.toString(input) );
 			}
+			sb.append(" => " );
+			sb.append(Character.toString(input));
 
-			Log.d("Final char", Character.toString(input) );
+			Log.d("Final ", sb.toString() );
 
 			csr += input;
 		}
@@ -261,6 +496,16 @@ public class MainActivity extends AppCompatActivity{
 		return csr;
 	}//caesar/
 
+
+
+
+	private static String stringReverse( String str ) {
+		String rts = "";
+		for( int l = str.length()-1; l >= 0; l-- ) {
+			rts += str.charAt(l);
+		}
+		return rts;
+	}//stringReverse/
 
 
 	@Override

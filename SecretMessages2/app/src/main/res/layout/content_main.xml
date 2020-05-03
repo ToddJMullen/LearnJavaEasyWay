@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Todd's Secret Messages App"
+        android:text="Todd's Scrambler"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -95,7 +95,7 @@
         android:layout_marginTop="20dp"
         android:ems="10"
         android:inputType="number"
-        android:text="7"
+        android:text="1"
         app:layout_constraintStart_toEndOf="@+id/lblKey"
         app:layout_constraintTop_toBottomOf="@+id/slKey" />
 
@@ -147,16 +147,6 @@
         app:layout_constraintTop_toBottomOf="@+id/btnEncode"
         tools:text="This is the output!" />
 
-    <Button
-        android:id="@+id/btnRecode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginRight="4dp"
-        android:text="^ Recode ^"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/taOutput" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -169,10 +159,10 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/taOutput"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="10.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/taInput"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintVertical_bias="1.15">
 
 
         <CheckBox
@@ -183,7 +173,6 @@
             android:textSize="20dp"
             app:layout_constraintBottom_toTopOf="@+id/taOutput"
             app:layout_constraintTop_toBottomOf="@+id/lblKey"
-            app:layout_constraintVertical_bias="0.0"
             tools:layout_editor_absoluteX="62dp" />
 
         <CheckBox
@@ -194,6 +183,12 @@
             android:textSize="20dp"
             app:layout_constraintTop_toBottomOf="@+id/btnEncode" />
 
+        <Button
+            android:id="@+id/btnRecode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="^ Recode ^"
+            />
 
     </LinearLayout>
 
